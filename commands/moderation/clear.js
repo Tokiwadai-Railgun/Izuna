@@ -1,0 +1,83 @@
+const { MessageEmbed } = require('discord.js');
+
+module.exports = {
+	name: "clear",
+	aliases: ["purge", "ratio", "clean"],
+	category: "moderation",
+	usage: "clear <amount> [target] (optionel)",
+	permissions :["VIEW_CHANNEL", "SEND_MESSAGES", "MANAGE_MESSAGES"],
+	description: "Supprime un certain nombre de messages, peut être complété avec une mention",
+	run: async (Izuna, message, args) => {
+		const userMention = message.mentions.members.first();
+		const amount = parseInt(args[0]) + 1; // +1 pour le message de commande
+		const logChannel = Izuna.channels.cache.get('982934381087826000');
+
+		if(!amount || amount <= 2 || amount > 100) return logChannel.send("Veuillez indiquer un nombre de messages à supprimer entre 2 et 100");
+
+		// création de l'embed pour la log
+		const logEmbed = new MessageEmbed()
+			.setColor("#ff0000")
+			.setTitle("Suppression de messages")
+			.setDescription( userMention ? `${message.author} a supprimé ${amount - 1} messages de ${userMention}.` : `${message.author} a supprimé ${amount - 1} messages.`)
+			.addField("Channel", message.channel.toString())
+			.setTimestamp()
+			.setFooter({ text: message.author.tag, iconURL: message.author.displayAvatarURL() });	
+			
+			
+			
+		const messages = await message.channel.messages.fetch();
+
+		// commande 
+		if(userMention) {
+			let i = 0;
+			const targetMessages = [];
+			(await messages).filter(msg => {
+				if (msg.author.id === userMention.id && parseInt(amount) > i) {
+					targetMessages.push(msg); 
+					i++; 
+				} 
+				
+			});
+			await message.channel.bulkDelete(targetMessages, true).then(msg => {logChannel.send({embeds: [logEmbed]})})
+
+			
+		} else {
+			await message.channel.bulkDelete(amount, true).then(msg => {logChannel.send({ embeds: [logEmbed] })});
+		}
+	},
+	options: [
+		{
+			name: "amount",
+			description: "Nombre de messages à supprimer",
+			type: "NUMBER",
+			required: true
+		},
+		{
+			name: "target",
+			description: "Mentionnez une personne pour ne supprimer que les messages de cette personne",
+			type: "USER",
+			required: false
+		}
+	],
+	runInteraction: async (Izuna, interaction) => {
+		const amount = interaction.options.getNumber("amount");
+		const target = interaction.options.getMember("target");
+		if (amount < 2 || amount > 100) return interaction.reply("Veuillez indiquer un nombre de messages à supprimer entre 2 et 100");
+	
+		const fetched = await interaction.channel.messages.fetch({ limit: amount });
+
+		if (target) {
+			let i = 0;
+			const targetMessages = [];
+			(await targetMessages).filter(msg => {
+				if (msg.author.id === target.id) targetMessages.push(msg); i++;
+			});
+
+			await interaction.channel.bulkDelete(targetMessages, true).then(msg => {interaction.reply(`${msg.size} messages de ${target} ont été supprimés`)});
+		} else {
+			const messages = fetched;
+			await interaction.channel.bulkDelete(messages, true).then(msg => {interaction.reply( msg.size > 1 ? `${msg.size} messages ont été supprimés` : `${msg.size} message a été supprimé`)});
+		}
+	
+	}
+}
