@@ -1,4 +1,6 @@
-const { MessageEmbed } = require('discord.js');
+const { MessageActionRow, MessageButton } = require('discord.js');
+
+const buttons = new MessageActionRow()
 
 module.exports = {
     name: "foo",
@@ -7,7 +9,7 @@ module.exports = {
     usage: "foo",
     permissions :["VIEW_CHANNEL", "SEND_MESSAGES"],
     description: "test des button",
-    run: async (Izuna, message, args) => {
+    run: async (Izuna, message, args) => { 
         
     },
     runInteraction: async (Izuna, interaction) => {
