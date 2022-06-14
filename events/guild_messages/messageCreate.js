@@ -1,16 +1,27 @@
-const PREFIX = "izu "
 const { Permissions } = require("discord.js")
 
 module.exports = {
     name: "messageCreate",
     once: false,
-    execute(Izuna, message) {
+    async execute(Izuna, message) {
+        
         // console.log de debug, pour savoir la dernière commande lancée avant un eventuelle crash
         console.log(`${message.guild.name} : ${message.author.tag} : ${message.content} | Embed : ${message.embeds.length}`);
 
+        if (message.channel.type === "dm") return;
+        if (message.guild.id != "926874968925548554" && message.guild.id != "732692494621605909") return;
+
+        let guildSettings = await Izuna.getGuild(message.guild);
+        if (!guildSettings) {
+            await Izuna.createGuild(message.guild);
+            guildSettings = await Izuna.getGuild(message.guild);
+            message.reply("Une mise à jours est survenue, vous pouvez retaper la commande");
+            return Izuna.channels.cache.get(guildSettings.logChannel).send(`Données du serveur mise à jours.`);
+        }
+
+        const PREFIX = guildSettings.prefix;
 
         if (message.author.bot) return;
-        if (message.channel.type === "dm") return;
 
         // ajouter anti pub
         if (message.content.includes("discord.gg") && !message.member.permissions.has(Permissions.FLAGS.MENTION_EVERYONE)) {
@@ -34,6 +45,13 @@ module.exports = {
         if (!command) return message.reply("Commande non reconnue.");
 
         if (!message.member.permissions.has([command.permissions])) return message.reply(`Permission(s) insufisante(s) (\`${command.permissions.join(", ")}\`), commande annulée`);
-        command.run(Izuna, message, args);
+        
+        
+        if (command.ownerOnly) {
+            if (message.author.id != "330026848052314112") return message.reply("Commande réservée aux développeurs.");
+        }
+        
+        command.run(Izuna, message, args, guildSettings);
+
     }
 }

@@ -1,8 +1,8 @@
 const { MessageActionRow, MessageButton } = require('discord.js');
 
 module.exports = {
-    name: "ticketSettings",
-    aliases: ["tSettings"],
+    name: "ticketsettings",
+    aliases: ["tsettings"],
     category: "ticket",
     usage: "ticketSettings <Status>",
     permissions :["ADMINISTRATOR"],

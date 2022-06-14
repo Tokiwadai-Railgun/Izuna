@@ -17,7 +17,7 @@ module.exports = {
             message.reply("Simulation de l'arrivée d'un membre.");
         } else if (args[0] === "guildMemberRemove") {
             Izuna.emit("guildMemberRemove", message.member);
-            message.reply("Simulation de la départ d'un membre.");
+            message.reply("Simulation du départ d'un membre.");
         } else if (args[0] === "guildCreate") {
             if (message.author.id != 330026848052314112) return message.reply("Permissions insufisantes  (`bot owner`), commande annulée.");
 

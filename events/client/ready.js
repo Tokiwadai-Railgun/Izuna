@@ -11,6 +11,9 @@ module.exports = {
         const testGuild = await Izuna.guilds.cache.get("973654683510001744");
         testGuild.commands.set(Izuna.commands.map(cmd => cmd));
 
+        const hazukumi = await Izuna.guilds.cache.get("732692494621605909");
+        hazukumi.commands.set(Izuna.commands.map(cmd => cmd));
+
         // commandes global -1h d'attente minimum
     }
 }

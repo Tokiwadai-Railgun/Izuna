@@ -2,7 +2,7 @@ const chalk = require('chalk');
 const dayjs = require('dayjs');
 
 const format = '----------\n{tstamp} {tag} {txt}\n';
-const format2 = "[{name}] {message} \n";
+const format2 = "[ {name} ] {message}\n";
 
 function error(content) {
     write(content, 'black', 'bgRed', "ERROR", true);

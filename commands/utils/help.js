@@ -2,7 +2,6 @@ const { ReactionUserManager } = require("discord.js");
 const { MessageEmbed } = require("discord.js");
 const { readdirSync } = require("fs");
 const commandsFolder = readdirSync("./commands/");
-const prefix = "izu ";
 
 module.exports = {
     name: "help",
@@ -12,7 +11,9 @@ module.exports = {
     usage: "help <commande> (pour plus de précision sur une commande)",
     permissions: ["VIEW_CHANNEL", "SEND_MESSAGES"],
     description: "Création d'un sondage",
-    run: async (Izuna, message, args) => {
+    run: async (Izuna, message, args, guildSettings) => {
+        const prefix = guildSettings.prefix
+
         if (args.length === 0) {
             const listEmbed = new MessageEmbed()
                 .setTitle("Liste des commandes")

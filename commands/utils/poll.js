@@ -14,6 +14,8 @@ module.exports = {
         const pollTitle = "Sondage"
         const pollQuestion = args.slice(0).join(" ");
 
+        if (!pollQuestion) return message.reply("Veuillez fournir une question pour votre sondage");
+
         const embed = new MessageEmbed()
             .setTitle(pollTitle)
             .setDescription(pollQuestion)
@@ -22,8 +24,8 @@ module.exports = {
             .setFooter({ text: "Nouveau sondage généré par " + message.author.tag, iconURL: message.author.displayAvatarURL() });
 
         const poll = await channelPing.send({ embeds: [embed], fetchReply: true });
-        poll.react("✅");
-        poll.react("❌");
+        await poll.react("✅");
+        await poll.react("❌");
     },
     options : [
         {
@@ -85,8 +87,8 @@ module.exports = {
 
         const poll = await channel.send({ embeds: [embed], fetchReply: true });
         
-        poll.react(firstChoice);
-        poll.react(secondChoice);
+        await poll.react(firstChoice);
+        await poll.react(secondChoice);
 
         interaction.reply(`Sondage créé dans le salon ${channel}`);
     }

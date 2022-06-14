@@ -4,6 +4,9 @@ const guildShema = mongoose.Schema({
     guildId: String,
     prefix: { "type": String, "default": "izu " },
     logChannel: { "type": String, "default": "926874969399500804" },
+    wlcChannel: { "type": String, "default": "926874969210777682" },
+    warnChannel: { "type": String, "default": "926874969210777682" },
+
 });
 
 module.exports = mongoose.model('Guild', guildShema);

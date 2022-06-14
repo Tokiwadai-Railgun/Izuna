@@ -1,14 +1,14 @@
 const { Client, Collection, } = require("discord.js");
 const dotenv = require("dotenv"); dotenv.config();
 const mongoose = require("mongoose");
-const Izuna = new Client({ intents: 515});
+const Izuna = new Client({ intents: 1539, partials: ["MESSAGE", "CHANNEL", "REACTION", "USER"]});
 const Logger = require("./utils/Logger");
 
-Izuna.commands = new Collection();
+["commands", "buttons", "selects"].forEach(x => Izuna[x] = new Collection());
 
 // event handler et commands handler
-["eventUtil", "commandUtil"].forEach(handler => { require(`./utils/handlers/${handler}`)(Izuna); });
-
+["eventUtil", "commandUtil", "buttonHandler", "selectHandler"].forEach(handler => { require(`./utils/handlers/${handler}`)(Izuna); });
+require("./utils/functions")(Izuna);
 
 process.on("exit", code => {Logger.warn("Process exit with code : " + code)});
 process.on("uncaughtException", (err, origin) => {Logger.error("Uncaught exception : " + err + " from " + origin)});
