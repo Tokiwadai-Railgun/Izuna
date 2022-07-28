@@ -1,5 +1,6 @@
 const ms = require('ms');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js');
+
 
 module.exports = {
 	name: "unmute",
@@ -20,15 +21,15 @@ module.exports = {
         if (!member.isCommunicationDisabled()) return message.reply("L'utilisateur mentionné n'est pas mute.");
         member.timeout(null, reason);
 
-        const logEmbed = new MessageEmbed()
+        const logEmbed = new EmbedBuilder()
             .setColor("#ff0000")
             .setTitle("Mute")
             .setThumbnail(member.displayAvatarURL())
-            .addFields(
+            .addFields([
                 { name: "Membre : ", value: member.user.tag, inline: false },
                 { name: "Durée : ", value: duration, inline:false },
                 { name: "Modérateur :", value: message.author.tag, inline:false },
-            )
+            ])
             .setThumbnail()
             .setFooter({ text: message.author.tag, iconURL: message.author.displayAvatarURL() });
             
@@ -38,13 +39,13 @@ module.exports = {
 		{
 			name: "target",
 			description: "Personne à bannir",
-			type: "USER",
+			type: ApplicationCommandOptionType.User,
 			required: true
 		},
         {
             name: "reason",
             description: "Raison du mute",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: false
         }
 	],
@@ -62,15 +63,15 @@ module.exports = {
         if (!user.moderatable) return interaction.reply("Utilisateur non mutable")
         user.timeout(null, reason);
 
-        const logEmbed = new MessageEmbed()
+        const logEmbed = new EmbedBuilder()
             .setColor("#ff0000")
             .setTitle("Unmute")
             .setThumbnail(user.displayAvatarURL())
-            .addFields(
+            .addFields([
                 { name: "Membre : ", value: user.tag, inline: false },
                 { name: "Raison : ", value: reason, inline:false },
                 { name: "Modérateur :", value: message.author.tag, inline:false },
-            )
+            ])
             .setThumbnail()
             .setFooter({ text: message.author.tag, iconURL: message.author.displayAvatarURL() });
             

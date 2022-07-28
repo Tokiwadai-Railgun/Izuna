@@ -6,7 +6,6 @@ const guildShema = mongoose.Schema({
     logChannel: { "type": String, "default": "926874969399500804" },
     wlcChannel: { "type": String, "default": "926874969210777682" },
     warnChannel: { "type": String, "default": "926874969210777682" },
-
 });
 
-module.exports = mongoose.model('Guild', guildShema);
+module.exports = mongoose.model('Guild', guildShema); 

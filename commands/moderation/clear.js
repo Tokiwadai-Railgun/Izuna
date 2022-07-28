@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js');
 
 module.exports = {
 	name: "clear",
@@ -15,11 +15,11 @@ module.exports = {
 		if(!amount || amount <= 2 || amount > 100) return logChannel.send("Veuillez indiquer un nombre de messages à supprimer entre 2 et 100");
 
 		// création de l'embed pour la log
-		const logEmbed = new MessageEmbed()
+		const logEmbed = new EmbedBuilder()
 			.setColor("#ff0000")
 			.setTitle("Suppression de messages")
 			.setDescription( userMention ? `${message.author} a supprimé ${amount - 1} messages de ${userMention}.` : `${message.author} a supprimé ${amount - 1} messages.`)
-			.addField("Channel", message.channel.toString())
+			.addFields([{name: "Channel", value: message.channel.toString()}])
 			.setTimestamp()
 			.setFooter({ text: message.author.tag, iconURL: message.author.displayAvatarURL() });	
 			
@@ -49,13 +49,13 @@ module.exports = {
 		{
 			name: "amount",
 			description: "Nombre de messages à supprimer",
-			type: "NUMBER",
+			type: ApplicationCommandOptionType.Number,
 			required: true
 		},
 		{
 			name: "target",
 			description: "Mentionnez une personne pour ne supprimer que les messages de cette personne",
-			type: "USER",
+			type: ApplicationCommandOptionType.User,
 			required: false
 		}
 	],

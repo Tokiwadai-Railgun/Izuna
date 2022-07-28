@@ -1,5 +1,5 @@
 const dayjs = require('dayjs');
-const { MessageEmbed, Formatters } = require('discord.js');
+const { EmbedBuilder, Formatters } = require('discord.js');
 
 module.exports = {
     name: "guildMemberAdd",
@@ -10,7 +10,7 @@ module.exports = {
         if (member.guild.id !== "926874968925548554") return;
 
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setAuthor( {name: `${member.user.tag} (${member.id})`, iconURL: member.user.displayAvatarURL()} )
             .setColor('#21ff81')
             .setDescription(`֍ Nom d'utilisateur : ${member}

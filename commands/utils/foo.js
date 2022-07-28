@@ -1,25 +1,25 @@
-const { MessageActionRow, MessageButton } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
-const buttons = new MessageActionRow()
+const buttons = new ActionRowBuilder()
     .addComponents(
-        new MessageButton()
+        new ButtonBuilder()
             .setLabel('Dev rôle')
-            .setStyle('PRIMARY')
+            .setStyle( ButtonStyle.Primary )
             .setCustomId("random_role_add"),
 
-        new MessageButton()
+        new ButtonBuilder()
             .setLabel('Discord.js')
             .setURL("https://discord.js.org/#/docs/discord.js/main/general/welcomeg")
-            .setStyle('LINK'),
+            .setStyle( ButtonStyle.Link ),
         
-        new MessageButton()
+        new ButtonBuilder()
             .setLabel("Dangerous")
-            .setStyle("DANGER")
+            .setStyle( ButtonStyle.Danger )
             .setCustomId("danger-button"),
         
-        new MessageButton()
+        new ButtonBuilder()
             .setLabel("Success")
-            .setStyle("SUCCESS")
+            .setStyle( ButtonStyle.Success )
             .setCustomId("succes-button")
         )
 

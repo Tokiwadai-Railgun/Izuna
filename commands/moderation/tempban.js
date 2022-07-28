@@ -1,4 +1,5 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js');
+
 const ms = require('ms');
 
 module.exports = {
@@ -22,15 +23,15 @@ module.exports = {
         if (!convertedTime) return message.reply("Durée non valide.");
 
 
-        const logEmbed = new MessageEmbed()
+        const logEmbed = new EmbedBuilder()
             .setColor("#ff0000")
             .setTitle("Bannissement")
             .setThumbnail(member.user.displayAvatarURL())
-            .addFields(
+            .addFields([
                 { name: "Membre : ", value: member.user.tag, inline: false },
                 { name: "Raison : ", value: reason, inline:false },
                 { name: "Moderateur :", value: message.author.tag, inline:false },
-            )            
+            ])            
             .setTimestamp()
             .setFooter({ text: message.author.tag, iconURL: message.author.displayAvatarURL() });
         
@@ -42,19 +43,19 @@ module.exports = {
 		{
 			name: "target",
 			description: "Personne à bannir",
-			type: "USER",
+			type: ApplicationCommandOptionType.User,
 			required: true
 		},
         {
             name: "duration",
             description: "Durée du bannissement",
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
             required: true 
         },
 		{
 			name: "raison",
 			description: "Raison du bannissement",
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			required: false
 		}, 
 
@@ -68,16 +69,16 @@ module.exports = {
         if (!target.bannable) return interaction.reply("Utilisateur non bannissable.");
         if (!duration || duration < 1 || duration > 7) return interaction.reply("Durée non valide, elle doit être comprise entre 1 et 7 jours.");
 
-        const logEmbed = new MessageEmbed()
+        const logEmbed = new EmbedBuilder()
             .setColor("#ff0000")
             .setTitle("Bannissement")
             .setThumbnail(target.user.displayAvatarURL())
-            .addFields(
+            .addFields([
                 { name: "Membre : ", value:  `\`\`\`${target.user.tag}\`\`\``, inline: false },
                 { name: "Durée :", value : duration.toString(), inline:false },
                 { name: "Raison : ", value: reason, inline:false },
                 { name: "Moderateur :", value: interaction.user.tag, inline:false },
-            )            
+            ])            
             .setTimestamp()
             .setFooter({ text: interaction.user.tag, iconURL: interaction.user.displayAvatarURL() });
             

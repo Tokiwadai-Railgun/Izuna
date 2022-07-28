@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js');
 
 module.exports = {
 	name: "ban",
@@ -16,15 +16,15 @@ module.exports = {
 
         const reason = args.slice(1).join(" ") || "Aucune raison spécifiée.";
 
-        const logEmbed = new MessageEmbed()
+        const logEmbed = new EmbedBuilder()
             .setColor("#ff0000")
             .setTitle("Bannissement")
             .setThumbnail(user.user.displayAvatarURL())
-            .addFields(
+            .addFields([
                 { name: "Membre : ", value: user.user.tag, inline: false },
                 { name: "Raison : ", value: reason, inline:false },
                 { name: "Moderateur :", value: message.author.tag, inline:false },
-            )            
+            ])            
             .setTimestamp()
             .setFooter({ text: message.author.tag, iconURL: message.author.displayAvatarURL() });
         
@@ -36,13 +36,13 @@ module.exports = {
 		{
 			name: "target",
 			description: "Personne à bannir",
-			type: "USER",
+			type: ApplicationCommandOptionType.User,
 			required: true
 		},
 		{
 			name: "raison",
 			description: "Raison du bannissement",
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			required: false
 		}
 	],
@@ -53,15 +53,15 @@ module.exports = {
 
         if (!target.bannable) return interaction.reply("Utilisateur non bannissable.");
        
-        const logEmbed = new MessageEmbed()
+        const logEmbed = new EmbedBuilder()
             .setColor("#ff0000")
             .setTitle("Bannissement")
             .setThumbnail(target.user.displayAvatarURL())
-            .addFields(
+            .addFields([
                 { name: "Membre", value:  `\`\`\`${target.user.tag}\`\`\``, inline: false },
                 { name: "Raison : ", value: reason, inline:false },
                 { name: "Moderateur :", value: interaction.user.tag, inline:false },
-            )            
+            ])            
             .setTimestamp()
             .setFooter({ text: interaction.user.tag, iconURL: interaction.user.displayAvatarURL() });
             

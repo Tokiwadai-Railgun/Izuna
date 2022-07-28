@@ -1,5 +1,4 @@
-const { ReactionUserManager, InteractionWebhook } = require("discord.js");
-
+const { ReactionUserManager, InteractionWebhook, ApplicationCommandOptionType } = require("discord.js");
 module.exports = {
     name: "dbconfig",
     category: "admin",
@@ -55,8 +54,8 @@ module.exports = {
     options : [
         {
             name: "key",
-            description: "La clefs liée au serveur.",
-            type: "STRING",
+            description: "Ce que vous voulez changer.",
+            type: ApplicationCommandOptionType.String,
             required: true,
             choices: [
                 {
@@ -79,7 +78,7 @@ module.exports = {
         {
             name: "value",
             description: "Eventuelle modification à apporter (id pour le salon).",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: false,
         },
     ],

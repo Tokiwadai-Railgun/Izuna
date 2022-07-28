@@ -1,6 +1,6 @@
 const { Guild } = require("../../models/index")
 const Logger = require("../../utils/logger")
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 module.exports = {
     name: "threadCreate",
@@ -10,7 +10,7 @@ module.exports = {
             if (oldThread.archived && !newThread.archived) {
                 console.log("1")
                 const logChannel = Izuna.channels.cache.get("926874969399500804");
-                const logEmbed = new MessageEmbed()
+                const logEmbed = new EmbedBuilder()
                     .setTitle("Thread restauré")
                     .setDescription(`Le thread ${newThread.name} a été restauré`)
                     .setTimestamp()

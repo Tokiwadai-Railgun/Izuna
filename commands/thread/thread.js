@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js');
 
 module.exports = {
 	name: "thread",
@@ -29,10 +29,10 @@ module.exports = {
             await message.reply("Suppression du thread");
             const logchannel = message.mentions.channels.first()
             if (!logchannel) return message.reply("Veuillez mentionner un channel pour les logs");
-            await logchannel.send({ embeds: [new MessageEmbed()
+            await logchannel.send({ embeds: [new EmbedBuilder()
                 .setTitle("Suppression d'un thread")
                 .setDescription(`Le thread ${thread.name} a été supprimé`)
-                .addField("Modérateur : ", message.author.tag)
+                .addFields([{name: "Modérateur : ", value: message.author.tag}])
                 .setColor("#ff0000")
                 .setTimestamp()]});
             await thread.delete();
@@ -42,29 +42,29 @@ module.exports = {
 		{
 			name: "join",
 			description: "Rejoindre un thread",
-			type: "SUB_COMMAND",
+			type: ApplicationCommandOptionType.Subcommand,
 		},
         {
 			name: "leave",
 			description: "Quitter un thread",
-			type: "SUB_COMMAND",
+			type: ApplicationCommandOptionType.Subcommand,
 		},
         {
 			name: "archive",
 			description: "Archiver un thread",
-			type: "SUB_COMMAND",
+			type: ApplicationCommandOptionType.Subcommand,
 		},
         {
 			name: "unarchive",
 			description: "Désarchiver un thread",
-			type: "SUB_COMMAND",
+			type: ApplicationCommandOptionType.Subcommand,
 		},
         {
 			name: "delete",
 			description: "Supprimer un thread",
-			type: "SUB_COMMAND",
+			type: ApplicationCommandOptionType.Subcommand,
             options: [
-                { name: "channel", type: "CHANNEL", required: true, description: "Salon de log" },
+                { name: "channel", type: ApplicationCommandOptionType.Channel, required: true, description: "Salon de log" },
             
             ]
 		}
@@ -87,10 +87,10 @@ module.exports = {
         } else if (interaction.options.getSubcommand() == "delete") {
             await interaction.reply("Suppression du thread");
             const logchannel = interaction.options.getChannel("channel");
-            await logchannel.send({ embeds: [new MessageEmbed()
+            await logchannel.send({ embeds: [new EmbedBuilder()
                 .setTitle("Suppression d'un thread")
                 .setDescription(`Le thread ${thread.name} a été supprimé`)
-                .addField("Modérateur : ", interaction.user.tag)
+                .addFields([{name: "Modérateur : ", value: interaction.user.tag}])
                 .setColor("#ff0000")
                 .setTimestamp()]});
             await thread.delete();

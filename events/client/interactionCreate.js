@@ -1,3 +1,5 @@
+const { InteractionType } = require("discord.js");
+
 module.exports = {
     name: "interactionCreate",
     once: false,
@@ -14,7 +16,7 @@ module.exports = {
         }
 
 
-        if (interaction.isCommand() || interaction.isContextMenu()) {
+        if (interaction.type === InteractionType.ApplicationCommand || interaction.isContextMenu()) {
             const cmd = Izuna.commands.get(interaction.commandName);
 
             if (!interaction.member.permissions.has(cmd.permissions)) return interaction.reply("Vous n'avez pas les permissions pour utiliser cette commande.");

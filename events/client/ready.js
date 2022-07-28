@@ -2,7 +2,11 @@ module.exports = {
     name: "ready",
     once: true,
     async execute(Izuna) {
+        let guildsCount = await Izuna.guilds.fetch();
+        let usersCount = await Izuna.guilds.cache.reduce((a, g) => a + g.memberCount, 0);
+
         console.log(`Izuna is ready! \n ------------------`);
+        console.log(`Guilds: ${guildsCount.size} | Users: ${usersCount}`);
     
         // commandes Instantanés (de test)
         const devGuild = await Izuna.guilds.cache.get("926874968925548554");//717098681809879092
@@ -14,6 +18,8 @@ module.exports = {
         const hazukumi = await Izuna.guilds.cache.get("732692494621605909");
         hazukumi.commands.set(Izuna.commands.map(cmd => cmd));
 
-        // commandes global -1h d'attente minimum
+        Izuna.user.setPresence({activities: [{ name: "izu help", type:"LISTENING" }], status: "idle"});
+
+        // commandes global ~1h d'attente avant maj
     }
 }

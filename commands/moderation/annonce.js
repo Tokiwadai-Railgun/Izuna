@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js');
 const { runInteraction } = require('../utils/ping');
 
 module.exports = {
@@ -10,11 +10,11 @@ module.exports = {
     description: "Annonce un message à tous les membres du serveur sous forme d'un Embed.",
     run: (Izuna, message, args) => {
 
-        const annonceEmbed = new MessageEmbed()
+        const annonceEmbed = new EmbedBuilder()
             .setColor('#0099ff')
             .setTitle("Annonce")
             .setThumbnail(message.author.displayAvatarURL())
-            .addField(args.join(" "))
+            .addFields([{value: args.join(" ")}])
             .setTimestamp()
 
         }, runInteraction(Izuna, interaction) {

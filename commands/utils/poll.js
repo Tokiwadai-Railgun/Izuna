@@ -1,6 +1,4 @@
-const { ReactionUserManager } = require("discord.js");
-const { MessageEmbed } = require("discord.js");
-
+const { ReactionUserManager, EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 module.exports = {
     name: "poll",
     aliases: ["vote", "sondage"],
@@ -16,7 +14,7 @@ module.exports = {
 
         if (!pollQuestion) return message.reply("Veuillez fournir une question pour votre sondage");
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle(pollTitle)
             .setDescription(pollQuestion)
             .setColor("#0099ff")
@@ -31,32 +29,32 @@ module.exports = {
         {
             name: "title",
             description: "Le titre du sondage",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
         },
         {
             name: "question",
             description: "La question du sondage",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
         },
         {
             name: "channel",
             description: "Le channel dans lequel sera envoyé le sondage",
-            type: "CHANNEL",
+            type: ApplicationCommandOptionType.Channel,
             required: true,
         },
         {
             name: "choix1",
             description: "Le choix 1 du sondage (sous forme d'emoji)",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: false,
 
         },
         {
             name: "choix2",
             description: "Le choix 2 du sondage (sous forme d'emoji)",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: false,
         }
     ],
@@ -78,7 +76,7 @@ module.exports = {
             }).catch(err => console.log(err));
         if (!emoji || !emoji2) return interaction.reply("Emoji non valide");
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle(pollTitle)
             .setDescription(pollQuestion)
             .setColor("#0099ff")

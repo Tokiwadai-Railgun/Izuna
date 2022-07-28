@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageButton } = require('discord.js');
+const { ActionRowBuilder, MessageButton } = require('discord.js');
 
 module.exports = {
     name: "ticketsettings",

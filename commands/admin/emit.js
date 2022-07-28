@@ -1,4 +1,4 @@
-const { ReactionUserManager } = require("discord.js");
+const { ReactionUserManager, ApplicationCommandOptionType } = require("discord.js");
 
 module.exports = {
     name: "emit",
@@ -29,7 +29,7 @@ module.exports = {
         {
             name: "event",
             description: "L'évènement à simuler.",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
             choices: [
                 { name: "guildMemberAdd", description: "L'arrivée d'un membre.", value: "guildMemberAdd" },

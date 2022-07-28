@@ -1,7 +1,7 @@
-const { Client, Collection, } = require("discord.js");
+const { Client, Collection, Partials} = require("discord.js");
 const dotenv = require("dotenv"); dotenv.config();
 const mongoose = require("mongoose");
-const Izuna = new Client({ intents: 1539, partials: ["MESSAGE", "CHANNEL", "REACTION", "USER"]});
+const Izuna = new Client({ intents: 38671, partials: [Partials.Message, Partials.Channel, Partials.Reaction, Partials.User]});
 const Logger = require("./utils/Logger");
 
 ["commands", "buttons", "selects"].forEach(x => Izuna[x] = new Collection());

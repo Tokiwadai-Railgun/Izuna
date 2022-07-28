@@ -1,8 +1,8 @@
-const { MessageActionRow, MessageSelectMenu } = require('discord.js');
+const { ActionRowBuilder, SelectMenuBuilder } = require('discord.js');
 
-const menu = new MessageActionRow()
+const menu = new ActionRowBuilder()
     .addComponents(
-        new MessageSelectMenu()
+        new SelectMenuBuilder()
             .setCustomId("role_add-menu")
             .setPlaceholder("Choisissez un rôle")
             .setMinValues(1)
