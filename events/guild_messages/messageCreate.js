@@ -20,8 +20,6 @@ module.exports = {
         }
 
         const PREFIX = guildSettings.prefix;
-        console.log(PREFIX)
-
         if (message.author.bot) return;
 
         // ajouter anti pub
@@ -34,7 +32,7 @@ module.exports = {
 
         //ajouter xp
         
-        if (message.guild.id === "926874968925548554") {
+        if (message.guild.id === "732692494621605909") {
             const xp = Math.floor(Math.random() * 5) + 1;
 
             if (message.channel.id != "819138310702235668") {
@@ -50,7 +48,6 @@ module.exports = {
             if (!userXpDb) {
                 await Izuna.createUserXp(message.member.id);
                 userXpDb = await Izuna.findUserXp(message.member.id);
-                Izuna.updateUserXp(message.member.id, { userCreatetag: message.member.tag });
             }
 
 
@@ -59,7 +56,7 @@ module.exports = {
                 let memberXp = userXpDb.userXp + xp;
                 let memberLevel = userXpDb.userLevel;
             
-                const memberNeedeedXP = userXpDb.userLevel * 120;
+                const memberNeedeedXP = userXpDb.userLevel * 60;
     
                 if (memberXp >= memberNeedeedXP) {
                     memberLevel++;
@@ -75,8 +72,7 @@ module.exports = {
 
         // commande
 
-        if (!message.content.toLowerCase().startsWith(PREFIX)) return console.log(message);
-        console.log("prefix")
+        if (!message.content.toLowerCase().startsWith(PREFIX)) return;
 
         const args = message.content.slice(PREFIX.length).trim().split(/ +/g);
         const commandName = args.shift().toLowerCase();

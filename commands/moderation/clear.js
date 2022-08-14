@@ -1,11 +1,11 @@
-const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js');
+const { EmbedBuilder, ApplicationCommandOptionType,PermissionsBitField } = require('discord.js');
 
 module.exports = {
 	name: "clear",
 	aliases: ["purge", "ratio", "clean"],
 	category: "moderation",
 	usage: "clear <amount> [target] (optionel)",
-	permissions :["VIEW_CHANNEL", "SEND_MESSAGES", "MANAGE_MESSAGES"],
+	permissions :[PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ManageMessages],
 	description: "Supprime un certain nombre de messages, peut être complété avec une mention",
 	run: async (Izuna, message, args) => {
 		const userMention = message.mentions.members.first();

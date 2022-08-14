@@ -1,4 +1,4 @@
-const { ReactionUserManager, InteractionWebhook, EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
+const { ReactionUserManager, InteractionWebhook, EmbedBuilder, ApplicationCommandOptionType, PermissionsBitField } = require("discord.js");
 const securityDb = require("../../models/securityModel.js");
 const userXpData = require("../../models/userXpData");
 
@@ -8,11 +8,10 @@ module.exports = {
     aliases: ["sconfig"],
     usage: "securityconfig <key> [value]",
     specialArgs: ["status","spamProtectStatus","adminRoles","adminMembers", "(correspod  à <key>)"],
-    permissions: ["ADMINISTRATOR"],
+    permissions: [PermissionsBitField.Flags.Administrator],
     ownerOnly: true,
     description: "Configurer les donnés relative au serveur.",
     async run(Izuna, message, args, guildSettings) {
-        console.log(args[0]);
         if (!args[0] || !args[0].match(/^(prefix|logChannel|wlcChannel)$/)) return message.reply(`Clefs non valide ou non précisée, tapez ` + "``" + guildSettings.prefix + "help dbconfig" + "``" + ` pour la liste des clefs.`);
 
         const key = args[0];
@@ -72,7 +71,6 @@ module.exports = {
             if (typeOfValueNeeded === "status")  {
                 interaction.reply("Début de la configuration")
                 await interaction.channel.send("Veuillez indiquer le status :.");
-                console.log(interaction.user.id)
                 // let rep = await Izuna.awaitUserMessage(interaction.channel, interaction.user);
                 interaction.channel.awaitMessages(
                     { 
@@ -81,7 +79,6 @@ module.exports = {
                         time: 10000, 
                         errors: ["time"] 
                     }).then(rep => {
-                        console.log(rep.first().content);
                         if (rep.content != "on" && rep != "off") {
                             Izuna.updateSecurityInfo(interaction.guild.id, key, { status: rep.first().content }).catch(err => console.log(err)); // et on sauvegarde le tout dans la BDD 
                             interaction.channel.send("Mise à jour effectuée.");
@@ -112,21 +109,64 @@ module.exports = {
                     collector.on("collect", async (rep) => { 
                         // dans un premier temps on check si on obtiens le bon type de valeurs (user/role)
                         if (typeOfValueNeeded === "user") {
+                            /* Deux choses à patch : 
+                            - Refaire la chose avec un array et non un string
+                            - Ajouter un message de confirmation de suppression si la donnée est déjà présente dans la BDD
+                            */
+
+
                             // on récupère les mentions papropriés
                             let mentions = rep.mentions.users;
                             let numberOfValueGot = mentions.size;
                             let valueGot = [];
-
-                            console.log(mentions);
+                            let valueToDelete = [];
 
                             // on ajoute les id dans la liste
                             for (let i = 0; i < numberOfValueGot; i++) {
                                 valueGot.push(mentions.at(i).id);
+
+                                // on détecte les valeurs qui sont déjà présentes
+                                if (serverSecInfo.adminMembers.includes(mentions.at(i).id)) {
+                                    valueToDelete.push(mentions.at(i).id);
+                                }
                             }
 
-                            let valueSynt = serverSecInfo.adminMembers + ", " + valueGot.join(" "); // on transcrit tout en chaine de caractères pour pouvoir l'ajouter dans la base de données
+                            // on demande à l'utilisateur si il veut supprimer les données déjà présentes et de mentionner celles qu'il ne veux pas supprimer
+                            if (valueToDelete.length > 0) {
+                                for (let i = 0; i < valueToDelete.length; i++) {
+                                    console.log(i)
+                                    interaction.channel.send(`L'utilisateur ${interaction.guild.members.cache.get(valueToDelete[i])} est déjà présent dans la liste des administrateurs. Voulez-vous le supprimer (oui/non)?`);
 
-                            Izuna.updateSecurityInfo(interaction.guild.id, key, { adminMembers: valueSynt }).catch(err => console.log(err)); // et on sauvegarde le tout dans la BDD 
+                                    const collector = interaction.channel.createMessageCollector({
+                                        filter: m => m.author.id == interaction.user.id,
+                                        max: 1,
+                                        time: 20000,
+                                        errors: ["time"]
+                                    });
+
+                                    await collector.on("collect", async (rep) => {
+                                        if (rep.content.toLowerCase() === "non") {   
+                                        } else if (rep.content.toLowerCase() === "oui") {
+                                            // on supprime la valeure de la BDD
+                                            let supprValue = serverSecInfo.adminMembers.splice(serverSecInfo.adminMembers.indexOf(valueToDelete[i]), 1);
+                                            console.log(1)
+                                            Izuna.updateSecurityInfo(interaction.guild.id, key, { adminMembers: supprValue }).catch(err => console.log(err));
+                                            i ++;
+                                        } else {
+                                            interaction.channel.send("Valeur non valide. Commande annulée");
+                                            return;
+                                        }
+                                    })
+                                }
+                            } else {
+                                print("Update")
+                                let valueSynt =  [...serverSecInfo.adminMembers, ...valueGot] // on combine les deux Array pour pouvoir les sauvegarder (les ... permettent d'obtenir les valeurs d'un Array pour les ajouter à un autre)
+
+                                Izuna.updateSecurityInfo(interaction.guild.id, key, { adminMembers: valueSynt }).catch(err => console.log(err)); // et on sauvegarde le tout dans la BDD 
+                                interaction.channel.send("Mise à jour effectuée, membres présents : " + valueSynt);
+                            }
+
+                            
 
                         }  else if (typeOfValueNeeded === "role") {
                             // on récupère les mentions papropriés
@@ -165,9 +205,32 @@ module.exports = {
                     break;
                 default:
                     // à chaner pour afficher l'état acthelle de la sécurité dans le serveur
-                    let test = ["test", "deuxième test"] // serverSecInfo.adminMembers.push("test");
-                    console.log(test);
-                    Izuna.updateSecurityInfo(interaction.guild.id, "adminsMembers", { adminMembers: test }).catch(err => console.log(err)); // et on sauvegarde le tout dans la BDD
+
+                    let adminMembersName = []
+                    for (let i = 0; i < serverSecInfo.adminMembers.length; i++) {
+                        if (serverSecInfo.adminMembers[i] === "") continue
+                        adminMembersName.push(interaction.guild.members.cache.get(serverSecInfo.adminMembers[i]));
+                    }
+
+                    let adminRolesName = []
+                    for (let i = 0; i < serverSecInfo.adminRoles.length; i++) {
+                        if (serverSecInfo.adminRoles[i] === "") continue
+                        adminRolesName.push(interaction.guild.roles.cache.get(serverSecInfo.adminRoles[i]));
+                    }
+
+
+                    const embed = new EmbedBuilder()
+                        .setTitle("Etat de la sécurité")
+                        .setThumbnail(interaction.guild.iconURL())
+                        .addFields([
+                            { name: "Status", value: serverSecInfo.status, inline: false },
+                            { name: "Spam protect", value: serverSecInfo.spamProtectStatus, inline: false },
+                            { name: "Membres administrateurs", value: adminMembersName.join(", ") || "aucun", inline: false },
+                            { name: "Rôles administrateurs (id)", value: adminRolesName.join(", ") || "aucun", inline: false },
+                        ])
+                            
+
+                    interaction.reply({embeds: [embed]});
                     break;
             }
     }

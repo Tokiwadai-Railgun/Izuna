@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField } = require('discord.js');
 
 const buttons = new ActionRowBuilder()
     .addComponents(
@@ -29,7 +29,7 @@ module.exports = {
     aliases: ["buttonTest"],
     category: "utils",
     usage: "foo",
-    permissions :["VIEW_CHANNEL", "SEND_MESSAGES"],
+    permissions :[PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages],
     description: "test des button",
     run: async (Izuna, message, args) => { 
         message.channel.send({ content: "voici les bouttons", components: [buttons] });

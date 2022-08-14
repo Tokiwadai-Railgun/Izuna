@@ -1,11 +1,11 @@
-const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js');
+const { EmbedBuilder, ApplicationCommandOptionType,PermissionsBitField } = require('discord.js');
 
 module.exports = {
 	name: "ban",
 	aliases: ["ban"],
 	category: "moderation",
 	usage: "ban <user> [reason]",
-	permissions :["BAN_MEMBERS"],
+	permissions :[PermissionsBitField.Flags.BanMembers],
 	description: "Bannis un membre, peut être compléter avec une raison.",
 	run: async (Izuna, message, args) => {
         const logChannel = Izuna.channels.cache.get('926874969399500804');

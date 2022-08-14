@@ -1,11 +1,11 @@
-const { ReactionUserManager, InteractionWebhook, ApplicationCommandOptionType } = require("discord.js");
+const { ReactionUserManager, InteractionWebhook, ApplicationCommandOptionType, PermissionsBitField } = require("discord.js");
 module.exports = {
     name: "dbconfig",
     category: "admin",
     aliases: ["emit"],
     usage: "dbconfig <key> [value]",
     specialArgs: ["prefix", "logchannel","wlcChannel", "(correspod  à <key>)"],
-    permissions: ["ADMINISTRATOR"],
+    permissions: [PermissionsBitField.Flags.Administrator],
     ownerOnly: true,
     description: "Configurer les donnés relative au serveur.",
     async run(Izuna, message, args, guildSettings) {

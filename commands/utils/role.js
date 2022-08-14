@@ -1,4 +1,4 @@
-const { ActionRowBuilder, SelectMenuBuilder } = require('discord.js');
+const { ActionRowBuilder, SelectMenuBuilder, PermissionsBitField } = require('discord.js');
 
 const menu = new ActionRowBuilder()
     .addComponents(
@@ -20,7 +20,7 @@ module.exports = {
     aliases: ["role"],
     category: "utils",
     usage: "foo",
-    permissions :["VIEW_CHANNEL", "SEND_MESSAGES"],
+    permissions :[ PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages ],
     description: "test du menu",
     run: async (Izuna, message, args) => { 
         message.channel.send({ content: "voici le menu", components: [menu] });

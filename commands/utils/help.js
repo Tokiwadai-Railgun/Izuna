@@ -1,4 +1,4 @@
-const { ReactionUserManager, EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
+const { ReactionUserManager, EmbedBuilder, ApplicationCommandOptionType, PermissionsBitField } = require("discord.js");
 const {  } = require("discord.js");
 const { readdirSync } = require("fs");
 const commandsFolder = readdirSync("./commands/");
@@ -9,8 +9,8 @@ module.exports = {
     specialArgs: ["emit", "avatar", "userinfo", "annonce", "help", "ping", "poll"],
     category: "utils",
     usage: "help <commande> (pour plus de précision sur une commande)",
-    permissions: ["VIEW_CHANNEL", "SEND_MESSAGES"],
-    description: "Création d'un sondage",
+    permissions: [ PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages ],
+    description: "Liste des commandes disponnibles et leurs utilisation",
     run: async (Izuna, message, args, guildSettings) => {
         const prefix = guildSettings.prefix
 
@@ -19,7 +19,7 @@ module.exports = {
                 .setTitle("Liste des commandes")
                 .setDescription("Voici la liste des commandes disponibles :")
                 .setColor("#7F0856")
-                .addField([{name: "Liste des commandes", value: `Une liste de toutes les catégories et commandes disponnibles. \n Pour plus d'informations sur une commande en particulier tapez : \`${prefix}help <command>\``}])
+                .addFields([{name: "Liste des commandes", value: `Une liste de toutes les catégories et commandes disponnibles. \n Pour plus d'informations sur une commande en particulier tapez : \`${prefix}help <command>\``}])
 
                 for (const category of commandsFolder) {
 
@@ -61,13 +61,14 @@ module.exports = {
     options : [
         {
             name: "command",
-            description: "une commande",
+            description: "Une commande si des informations suplémentaires sont nessessaires",
             type: ApplicationCommandOptionType.String,
             required: false,
         }
     ],
-    runInteraction: async (Izuna, interaction) => {
+    runInteraction: async (Izuna, interaction, guildSettings) => {
         const commandName = interaction.options.getString("command");
+        const prefix = guildSettings.prefix
 
         if (!commandName) {
             // on créer l'embed qui va contenir la liste des commandes
@@ -75,7 +76,7 @@ module.exports = {
             .setTitle("Liste des commandes")
             .setDescription("Voici la liste des commandes disponibles :")
             .setColor("#7F0856")
-            .addField("Liste des commandes", `Une liste de toutes les catégories et commandes disponnibles. \n Pour plus d'informations sur une commande en particulier tapez : \`${prefix}help <command>\``)
+            .addFields([{ name: "Liste des commandes", value: `Une liste de toutes les catégories et commandes disponnibles. \n Pour plus d'informations sur une commande en particulier tapez : \`${prefix}help <command>\``}])
 
             // on ajoute chaque commande grâce à une boucle qui parcours le dossier des commandes
             for (const category of commandsFolder) {

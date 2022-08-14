@@ -1,4 +1,4 @@
-const { ReactionUserManager, InteractionWebhook, EmbedBuilder } = require("discord.js");
+const { ReactionUserManager, InteractionWebhook, EmbedBuilder, PermissionsBitField } = require("discord.js");
 const serverList = [ "926874968925548554", "732692494621605909" ]
 
 module.exports = {
@@ -6,19 +6,16 @@ module.exports = {
     category: "hazukumi",
     aliases: ["inf"],
     usage: "info",
-    permissions: ["SEND_MESSAGES", "VIEW_CHANNEL"],
+    permissions: [PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ViewChannel],
     ownerOnly: false,
     description: "Affiche les données du membre.",
     async run(Izuna, message, args, guildSettings) {
-        console.log("info");
         if (!serverList.find(e => e === message.guild.id)) return message.reply("Commande indisponnible sur le serveur.");
 
         const dbStats = await Izuna.findUserXp(message.author.id);
 
         if (!dbStats) {
-            await Izuna.createUserXp(message.member.id);
-            userXpDb = await Izuna.findUserXp(message.member.id);
-            Izuna.updateUserXp(message.member.id, { userCreatetag: message.member.user.tag });
+            return
         }
 
         const statsEmbed = new EmbedBuilder()
@@ -27,8 +24,8 @@ module.exports = {
             .setThumbnail(message.author.displayAvatarURL())
             .addFields([
                 { name: "Nom", value: `${message.author.tag}`, inline: false },
-                { name: "Experience : ", value: `XP actuelle : **${dbStats.userXp}**  \n Xp avant le prochain niveau : **${(dbStats.userLevel * 120) - dbStats.userXp}**`, inline: false },
-                { name: "Niveau Actuel :", value: "**${dbStats.userLevel}**", inline: false },
+                { name: "Experience : ", value: `XP actuelle : **${dbStats.userXp}**  \n Xp avant le prochain niveau : **${(dbStats.userLevel * 60) - dbStats.userXp}**`, inline: false },
+                { name: "Niveau Actuel :", value: `**${dbStats.userLevel}**`, inline: false },
                 { name: "Coins : ", value: `**${dbStats.userCoins}**`, inline: false },
             ])
 
@@ -36,6 +33,26 @@ module.exports = {
         message.channel.send({ embeds: [statsEmbed]});
     },
     async runInteraction(Izuna, interaction, guildSettings) {
+        if (!serverList.find(e => e === interaction.guild.id)) return interaction.reply("Commande indisponnible sur le serveur.");
 
+        const dbStats = await Izuna.findUserXp(interaction.user.id);
+
+        if (!dbStats) {
+            return
+        }
+
+        const statsEmbed = new EmbedBuilder()
+            .setColor("#0099ff")
+            .setTitle("Informations sur le membre")
+            .setThumbnail(interaction.user.displayAvatarURL())
+            .addFields([
+                { name: "Nom", value: `${interaction.user.tag}`, inline: false },
+                { name: "Experience : ", value: `XP actuelle : **${dbStats.userXp}**  \n Xp avant le prochain niveau : **${(dbStats.userLevel * 60) - dbStats.userXp}**`, inline: false },
+                { name: "Niveau Actuel :", value: `**${dbStats.userLevel}**`, inline: false },
+                { name: "Coins : ", value: `**${dbStats.userCoins}**`, inline: false },
+            ])
+
+
+        interaction.reply({ embeds: [statsEmbed]});
     }
 }

@@ -1,4 +1,4 @@
-const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js');
+const { EmbedBuilder, ApplicationCommandOptionType, PermissionsBitField } = require('discord.js');
 
 const ms = require('ms');
 
@@ -7,7 +7,7 @@ module.exports = {
 	aliases: ["softban"],
 	category: "moderation",
 	usage: "tempban <user> <duration> [reason]",
-	permissions :["BAN_MEMBERS"],
+	permissions :[PermissionsBitField.Flags.BanMembers],
     specialArgs: ["10 min (par exemple)"],
 	description: "Bannis un membre, peut être compléter avec une raison.",
 	run: async (Izuna, message, args) => {

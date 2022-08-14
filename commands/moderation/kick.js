@@ -1,4 +1,4 @@
-const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js');
+const { EmbedBuilder, ApplicationCommandOptionType, PermissionsBitField } = require('discord.js');
 
 
 module.exports = {
@@ -6,7 +6,7 @@ module.exports = {
 	aliases: ["kick"],
 	category: "moderation",
 	usage: "kick <user> [reason]",
-	permissions :["KICK_MEMBERS"],
+	permissions :[PermissionsBitField.Flags.KickMembers],
 	description: "Expulse un membre, peut être compléter avec une raison.",
 	run: async (Izuna, message, args) => {
         const logChannel = Izuna.channels.cache.get('926874969399500804');

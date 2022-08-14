@@ -1,10 +1,10 @@
-const { ReactionUserManager, EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
+const { ReactionUserManager, EmbedBuilder, ApplicationCommandOptionType, PermissionsBitField } = require("discord.js");
 module.exports = {
     name: "poll",
     aliases: ["vote", "sondage"],
     category: "utils",
     usage: "poll <question>",
-    permissions: ["VIEW_CHANNEL", "SEND_MESSAGES", "MENTION_EVERYONE"],
+    permissions: [ PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.MentionEveryone ],
     description: "Création d'un sondage",
     run: async (Izuna, message, args) => {
         if (!args) return message.reply("Veuillez fournir une question pour votre sondage")
@@ -65,16 +65,19 @@ module.exports = {
         const firstChoice = interaction.options.getString("choix1")?.trim() || "✅";
         const secondChoice = interaction.options.getString("choix2")?.trim() || "❌";
 
-        const emoji = await interaction.guild.emojis.fetch()
+        let emoji = await interaction.guild.emojis.fetch()
             .then(emojis => {
                 return emojis.find(emoji => emoji.name === firstChoice || emoji.toString() === firstChoice);
             }).catch(err => console.log(err));
             
-        const emoji2 = await interaction.guild.emojis.fetch()
+        let emoji2 = await interaction.guild.emojis.fetch()
             .then(emojis => {
                 return emojis.find(emoji => emoji.name === secondChoice || emoji.toString() === secondChoice);
             }).catch(err => console.log(err));
-        if (!emoji || !emoji2) return interaction.reply("Emoji non valide");
+        if (!emoji || !emoji2) {
+            emoji = "✅";
+            emoji2 = "❌";
+        }
 
         const embed = new EmbedBuilder()
             .setTitle(pollTitle)

@@ -1,11 +1,11 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 
 module.exports = {
     name: "ping",
     aliases: ["latency", "latence"],
     category: "utils",
     usage: "ping",
-    permissions :["VIEW_CHANNEL", "SEND_MESSAGES"],
+    permissions :[ PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages ],
     description: "Pong !",
     run: async (Izuna, message, args) => {
         const tryPong = await message.channel.send({ content: "On essaye de pong .... un instant ! ", fetchReply: true}); 

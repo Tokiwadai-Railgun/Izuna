@@ -1,11 +1,11 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 
 module.exports = {
 	name: "unlock",
 	aliases: ["deverouiller"],
 	category: "moderation",
 	usage: "unluck",
-	permissions :["MANAGE_CHANNELS"],
+	permissions :[PermissionsBitField.Flags.ManageChannels],
 	description: "Dévérouille un salon.",
 	run: async (Izuna, message, args) => {
         const logChannel = message.channel;

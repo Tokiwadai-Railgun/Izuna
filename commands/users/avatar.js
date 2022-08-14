@@ -1,11 +1,11 @@
-const { EmbedBuilder, ApplicationCommandType } = require('discord.js');
+const { EmbedBuilder, ApplicationCommandType, PermissionsBitField } = require('discord.js');
 
 module.exports = {
     name: "userAvatar",
     usage: "clique droit sur l'utiisateur, application, userAvatar",
     category: "users",
     type: ApplicationCommandType.User,
-    permissions: ["VIEW_CHANNEL", "SEND_MESSAGES"],
+    permissions: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages],
     runInteraction: async (Izuna, interaction) => {
         const member = await interaction.guild.members.fetch(interaction.targetId);
         

@@ -51,8 +51,7 @@ module.exports = Izuna => {
             if (userData[key] != memberSettings[key]) userData[key] = memberSettings[key];
 
         }
-
-        return userData.updateOne(memberSettings);
+        return userData.updateOne(userData);
     }
 
     Izuna.updateSecurityInfo = async (guildId, key, value) => {

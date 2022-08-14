@@ -1,4 +1,4 @@
-const { ReactionUserManager, ApplicationCommandOptionType } = require("discord.js");
+const { ReactionUserManager, ApplicationCommandOptionType, PermissionsBitField } = require("discord.js");
 
 module.exports = {
     name: "emit",
@@ -6,7 +6,7 @@ module.exports = {
     aliases: ["emit"],
     usage: "emit <event>",
     specialArgs: ["guildMemberAdd", "guildMemberRemove", "guildCreate"],
-    permissions: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADMINISTRATOR"],
+    permissions: [PermissionsBitField.Flags.Administrator],
     description: "Simule un évènement au choix.",
     run: (Izuna, message, args) => {
         console.log(args[0]);

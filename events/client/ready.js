@@ -18,7 +18,7 @@ module.exports = {
         const hazukumi = await Izuna.guilds.cache.get("732692494621605909");
         hazukumi.commands.set(Izuna.commands.map(cmd => cmd));
 
-        Izuna.user.setPresence({activities: [{ name: "izu help", type:"LISTENING" }], status: "idle"});
+        Izuna.user.setPresence({activities: [{ name: "izu help", type:"LISTENING" }], status: "online"});
 
         // commandes global ~1h d'attente avant maj
     }

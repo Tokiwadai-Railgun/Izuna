@@ -1,4 +1,4 @@
-const { ReactionUserManager } = require("discord.js");
+const { ReactionUserManager, PermissionsBitField } = require("discord.js");
 const guild = require("../../models/guild");
 const { Guild } = require("../../models/index");
 
@@ -9,7 +9,7 @@ module.exports = {
     usage: "update",
     ownerOnly: true,
     specialArgs: ["guildMemberAdd", "guildMemberRemove", "guildCreate"],
-    permissions: ["VIEW_CHANNEL", "SEND_MESSAGES", "ADMINISTRATOR"],
+    permissions: [PermissionsBitField.Flags.Administrator],
     description: "Simule un évènement au choix.",
     async run(Izuna, message, args) {
         await Guild.updateMany({}, { $set: { "xp": "" }, upsert: true });

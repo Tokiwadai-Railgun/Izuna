@@ -1,11 +1,11 @@
-const { ActionRowBuilder, MessageButton } = require('discord.js');
+const { ActionRowBuilder, MessageButton, PermissionsBitField } = require('discord.js');
 
 module.exports = {
     name: "ticketsettings",
     aliases: ["tsettings"],
     category: "ticket",
     usage: "ticketSettings <Status>",
-    permissions :["ADMINISTRATOR"],
+    permissions :[PermissionsBitField.Flags.Administrator],
     description: "configuration de la fonction ticket",
     run: async (Izuna, message, args) => { 
         message.reply("Développement de la commande en cours")

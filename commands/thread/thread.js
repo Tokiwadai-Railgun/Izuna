@@ -1,4 +1,4 @@
-const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js');
+const { EmbedBuilder, ApplicationCommandOptionType, PermissionsBitField } = require('discord.js');
 
 module.exports = {
 	name: "thread",
@@ -6,7 +6,7 @@ module.exports = {
 	category: "thread",
 	usage: "thread <sous commande> [salon (si requis)]",
     specialAgs: ["Join", "Leave", "archive", "unarchive", "delete (nessessite de mentionner un salon)"],
-	permissions :["MANAGE_THREADS"],
+	permissions :[PermissionsBitField.Flags.ManageThreads],
 	description: "Modération des threads",
 	run: async (Izuna, message, args) => {
         if (!args[0]) return message.channel.send("Veuillez spécifier une action.");

@@ -1,5 +1,5 @@
 const ms = require('ms');
-const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js');
+const { EmbedBuilder, ApplicationCommandOptionType, PermissionsBitField } = require('discord.js');
 
 
 module.exports = {
@@ -8,7 +8,7 @@ module.exports = {
 	category: "moderation",
 	usage: "unmute <user> [reason]",
     specialArgs: ["10 minutes (par exemple)"],
-	permissions :["MODERATE_MEMBERS"],
+	permissions :[PermissionsBitField.Flags.MuteMembers],
 	description: "Mute une personne pour une duré spécifiée.",
 	run: async (Izuna, message, args) => {
         const logChannel = Izuna.channels.cache.get("926874969399500804")

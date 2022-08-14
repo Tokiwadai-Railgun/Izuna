@@ -1,10 +1,11 @@
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = {
     name: "collector",
     aliases: ["collector"],
     category: "utils",
     usage: "collector",
-    permissions :["VIEW_CHANNEL", "SEND_MESSAGES"],
+    permissions :[PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages],
     description: "nothing !",
     run: async (Izuna, message, args) => {
         const filter = (reaction, user) => {
