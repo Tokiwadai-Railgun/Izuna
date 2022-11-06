@@ -124,6 +124,7 @@ module.exports = {
                             // on ajoute les id dans la liste
                             for (let i = 0; i < numberOfValueGot; i++) {
                                 valueGot.push(mentions.at(i).id);
+                                console.log(valueGot)
 
                                 // on détecte les valeurs qui sont déjà présentes
                                 if (serverSecInfo.adminMembers.includes(mentions.at(i).id)) {
@@ -159,7 +160,6 @@ module.exports = {
                                     })
                                 }
                             } else {
-                                print("Update")
                                 let valueSynt =  [...serverSecInfo.adminMembers, ...valueGot] // on combine les deux Array pour pouvoir les sauvegarder (les ... permettent d'obtenir les valeurs d'un Array pour les ajouter à un autre)
 
                                 Izuna.updateSecurityInfo(interaction.guild.id, key, { adminMembers: valueSynt }).catch(err => console.log(err)); // et on sauvegarde le tout dans la BDD 
@@ -168,21 +168,55 @@ module.exports = {
 
                             
 
+                            /// place aux rôles ///
                         }  else if (typeOfValueNeeded === "role") {
-                            // on récupère les mentions papropriés
                             let mentions = rep.mentions.roles;
                             let numberOfValueGot = mentions.size;
                             let valueGot = [];
-                            // on ajoute les id dans la liste
+                            let valueToDelete = [];
+
                             for (let i = 0; i < numberOfValueGot; i++) {
                                 valueGot.push(mentions.at(i).id);
+                                console.log(valueGot)
+
+                                // on détecte les valeurs qui sont déjà présentes
+                                if (serverSecInfo.adminRoles.includes(mentions.at(i).id)) {
+                                    valueToDelete.push(mentions.at(i).id);
+                                }
                             }
 
-                            console.log(valueGot.join(", "))
-                            let valueSynt = serverSecInfo.adminRoles+ ", " + valueGot.join(", "); // on transcrit tout en chaine de caractères pour pouvoir l'ajouter dans la base de données
+                            // on demande à l'utilisateur si il veut supprimer les données déjà présentes et de mentionner celles qu'il ne veux pas supprimer
+                            if (valueToDelete.length > 0) {
+                                for (let i = 0; i < valueToDelete.length; i++) {
+                                    console.log(i)
+                                    interaction.channel.send(`Le rôle ${interaction.guild.roles.cache.get(valueToDelete[i])} est déjà présent dans la liste des rôles administrateurs. Voulez-vous le supprimer (oui/non)?`);
 
-                            Izuna.updateSecurityInfo(interaction.guild.id, key, { adminRoles: valueSynt }).catch(err => console.log(err)); // et on sauvegarde le tout dans la BDD                        
-                        
+                                    const collector = interaction.channel.createMessageCollector({
+                                        filter: m => m.author.id == interaction.user.id,
+                                        max: 1,
+                                        time: 20000,
+                                        errors: ["time"]
+                                    });
+
+                                    await collector.on("collect", async (rep) => {
+                                        if (rep.content.toLowerCase() === "non") {   
+                                        } else if (rep.content.toLowerCase() === "oui") {
+                                            // on supprime la valeure de la BDD
+                                            let supprValue = serverSecInfo.adminRoles.splice(serverSecInfo.adminRoles.indexOf(valueToDelete[i]), 1);
+                                            console.log(1)
+                                            Izuna.updateSecurityInfo(interaction.guild.id, key, { adminRoles: supprValue }).catch(err => console.log(err));
+                                            i ++;
+                                        } else {
+                                            interaction.channel.send("Valeur non valide. Commande annulée");
+                                            return;
+                                        }
+                                    })
+                                }
+                            } else {
+                                let valueSynt =  [...serverSecInfo.adminRoles, ...valueGot] // on combine les deux Array pour pouvoir les sauvegarder (les ... permettent d'obtenir les valeurs d'un Array pour les ajouter à un autre)
+
+                                Izuna.updateSecurityInfo(interaction.guild.id, key, { adminRoles: valueSynt }).catch(err => console.log(err)); // et on sauvegarde le tout dans la BDD 
+                            }
                         }
                     });
                 }
@@ -204,7 +238,7 @@ module.exports = {
                     valueEntrance("spamProtectStatus", "status");
                     break;
                 default:
-                    // à chaner pour afficher l'état acthelle de la sécurité dans le serveur
+                    // à changer pour afficher l'état acthelle de la sécurité dans le serveur
 
                     let adminMembersName = []
                     for (let i = 0; i < serverSecInfo.adminMembers.length; i++) {
@@ -214,6 +248,7 @@ module.exports = {
 
                     let adminRolesName = []
                     for (let i = 0; i < serverSecInfo.adminRoles.length; i++) {
+                        console.log(serverSecInfo.adminRoles[i])
                         if (serverSecInfo.adminRoles[i] === "") continue
                         adminRolesName.push(interaction.guild.roles.cache.get(serverSecInfo.adminRoles[i]));
                     }

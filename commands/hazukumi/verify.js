@@ -21,6 +21,11 @@ module.exports = {
         return message.author.send("Bienvenue sur Hazukumi")
     },
     runInteraction: async (Izuna, interaction) => {
+        if (interaction.guild.id !== "732692494621605909") return interaction.reply({ content : "Cette commande est indisponnible sur ce serveur", ephemeral: true});
+        if (message.member.roles.cache.get("732868683679924344")) return interaction.reply({content: "Tu as déjà le rôle membre", ephemeral: true});
+
+        interaction.member.roles.add("732868683679924344")
+        return interaction.reply("Bienvenue sur Hazukumi")
 
     }
 }

@@ -3,6 +3,7 @@ const userXpData = require("../models/userXpData.js");
 const securityModel = require("../models/securityModel.js");
 const logger = require("../utils/logger.js");
 const { Interaction } = require("discord.js");
+const guild = require("../models/guild.js");
 
 module.exports = Izuna => {
     Izuna.getGuild = async guild => {
@@ -81,5 +82,11 @@ module.exports = Izuna => {
         }
 
         return guildSecurityData.updateOne(value);
+    }
+
+    Izuna.getSecurityData = async(guildId) => {
+        let guildSecurityData = await securityModel.findOne({guildId: guildId});
+
+        return guildSecurityData;
     }
 }

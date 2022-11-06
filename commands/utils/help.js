@@ -12,6 +12,7 @@ module.exports = {
     permissions: [ PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages ],
     description: "Liste des commandes disponnibles et leurs utilisation",
     run: async (Izuna, message, args, guildSettings) => {
+        console.log("confirmation")
         const prefix = guildSettings.prefix
 
         if (args.length === 0) {
