@@ -12,7 +12,7 @@ module.exports = {
         guildSecurityData = await Izuna.getSecurityData(newRole.guild.id);
         if (!guildSecurityData || guildSecurityData.status == "off") return console.log("security disabled")
 
-        adminPerms = [PermissionsBitField.Flags.Administrator, PermissionsBitField.Flags.KickMembers, PermissionsBitField.Flags.BanMembers, PermissionsBitField.Flags.ManageGuild, PermissionsBitField.Flags.ManageRoles]
+        const adminPerms = [PermissionsBitField.Flags.Administrator, PermissionsBitField.Flags.KickMembers, PermissionsBitField.Flags.BanMembers, PermissionsBitField.Flags.ManageGuild, PermissionsBitField.Flags.ManageRoles]
 
         for (role of guildSecurityData.adminRoles) {
             if (newRole.id === role) return
@@ -20,33 +20,21 @@ module.exports = {
 
         let i = 0;
 
-        for (perm of adminPerms) {
-          console.log(perm)
-          try {
+        const editingPermissions = role.permissions;
 
-            if (newRole.permissions.has(perm)) {
-              console.log(`"${perm}" permission detected on "${newRole.name}" : permission removed (${newRole.guild.name})`)
+        for (let perm in newRole.permissions) {
 
-                const rolePermissions = newRole.permissions.bitfield
-                await rolePermissions.remove(PermissionsBitField.Flags.Administrator)
-
-                newRole.setPermissions(0);
-                newRole.setPermissions(rolePermissions)
-
-                console.log(newRole.permissions)
-            };
-          } catch (e) {
-            console.log(e)
+        // on essaie les permisions pour ne garder que celles qui sont "saines"
+          if (adminPerms.includes(perm)) {
+            editingPermissions.remove(perm);
+            console.log(`permissions ${perm.bitfield.Flag} détéctée sur le rôle ${newRole.name} : permissions supprimée`)
+            
+            
+            // eventuellement continuer avec un message.send
           }
-
-
-            i++
-
-
-
-
-            // /!\ à finir : ne fonctionne pas
         }
 
+        // maintenant que l'on a une version triée des permissions, on push cette nouvelle version dans le rôle
+        newRole.edit({ permissions: editingPermissions});
     }
 }
