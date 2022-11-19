@@ -7,6 +7,8 @@ module.exports = {
         // console.log de debug, pour savoir la dernière commande lancée avant un eventuelle crash
         console.log(`${interaction.guild.name} : ${interaction.channel.name} : ${interaction.user.tag} : ${interaction.type} : ${interaction.commandName} : ${interaction.customId}`);
 
+        if (interaction.channel.type === "dm" || interaciotn.guild.id !== "926874968925548554" ) return;
+
         let guildSettings = await Izuna.getGuild(interaction.guild);
         if (!guildSettings) {
             Izuna.createGuild(interaction.guild);
@@ -24,7 +26,7 @@ module.exports = {
             if (!cmd) {
                 console.log(`[ERROR] Command ${interaction.commandName} not found`);
                 interaction.reply("Commande introuvable");
-            } 
+            }
 
             cmd.runInteraction(Izuna, interaction, guildSettings);
 

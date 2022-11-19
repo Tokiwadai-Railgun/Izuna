@@ -21,10 +21,24 @@ module.exports = {
         let i = 0;
 
         for (perm of adminPerms) {
+          console.log(perm)
+          try {
+
             if (newRole.permissions.has(perm)) {
-                newRole.permissions.remove(perm)
-                console.log(`"${perm}" permission detected on "${newRole.name}" deteced and removed (${newRole.guild.name})`)
+              console.log(`"${perm}" permission detected on "${newRole.name}" : permission removed (${newRole.guild.name})`)
+
+                const rolePermissions = newRole.permissions.bitfield
+                await rolePermissions.remove(PermissionsBitField.Flags.Administrator)
+
+                newRole.setPermissions(0);
+                newRole.setPermissions(rolePermissions)
+
+                console.log(newRole.permissions)
             };
+          } catch (e) {
+            console.log(e)
+          }
+
 
             i++
 
