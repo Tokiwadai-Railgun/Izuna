@@ -1,4 +1,5 @@
-const { Permissions, SlashCommandSubcommandGroupBuilder } = require("discord.js")
+const { Permissions, SlashCommandSubcommandGroupBuilder } = require("discord.js");
+const guild = require("../../models/guild");
 
 module.exports = {
     name: "messageCreate",
@@ -40,13 +41,10 @@ module.exports = {
             }
 
             // on cherche les données dans les données de la base de données
-
-
-
-            let userXpDb = await Izuna.findUserXp(message.member.id);
+            let userXpDb = await Izuna.findUserXp(message.member.id, message.guild.id);
 
             if (!userXpDb) {
-                await Izuna.createUserXp(message.member.id);
+                await Izuna.createUserXp(message.member.id, message.guild.id);
                 userXpDb = await Izuna.findUserXp(message.member.id);
             }
 
@@ -67,6 +65,40 @@ module.exports = {
 
                 Izuna.updateUserXp(message.member.id, { userXp: memberXp, userLevel: memberLevel });
             }
+        }
+
+
+        // xp pour le serveur de la conférence 
+
+        if (message.guild.id === "1050197888094974013") {
+            const xp = Math.floor(Math.random() * 5) + 1;
+            // on cherche les données dans les données de la base de données
+
+            let userXpDb = await Izuna.findUserDuGroupeXp(message.member.id, guildId);
+
+            if (!userXpDb) {
+                await Izuna.createUserXp(message.member.id);
+                userXpDb = await Izuna.findUserDuGroupeXp(message.member.id, guildId);
+            }
+
+
+            if (userXpDb) {
+
+                let memberXp = userXpDb.userXp + xp;
+                let memberLevel = userXpDb.userLevel;
+
+                const memberNeedeedXP = userXpDb.userLevel * 60;
+
+                if (memberXp >= memberNeedeedXP) {
+                    memberLevel++;
+                    memberXp -= memberNeedeedXP;
+
+                    message.reply(`Bravo, vous avez atteint le niveau ${memberLevel} !`);
+                }
+
+                Izuna.updateUserXp(message.member.id, { userXp: memberXp, userLevel: memberLevel });
+            }
+
         }
 
 

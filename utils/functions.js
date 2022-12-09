@@ -5,6 +5,8 @@ const logger = require("../utils/logger.js");
 const { Interaction } = require("discord.js");
 const guild = require("../models/guild.js");
 
+const userDuGroupeXpData = require("../models/userDuGroupeXpData.js")
+
 module.exports = Izuna => {
     Izuna.getGuild = async guild => {
         const guildData = await Guild.findOne({ guildId: guild.id });
@@ -32,9 +34,15 @@ module.exports = Izuna => {
 
     // XP
 
-    Izuna.findUserXp = async (memberId) => {
-        const userData = await userXpData.findOne({ userId: memberId });
-        return userData;
+    Izuna.findUserXp = async (memberId, guildId) => {
+        if (guildId == "732692494621605909") {
+            const userData = await userXpData.findOne({ userId: memberId });
+            return userData;
+
+        } else if (guildId === "1050197888094974013") {
+
+        }
+
     
     }
 

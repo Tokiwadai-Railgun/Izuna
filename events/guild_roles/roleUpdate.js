@@ -22,12 +22,12 @@ module.exports = {
 
         const editingPermissions = role.permissions;
 
-        for (let perm in newRole.permissions) {
+        for (let perm of newRole.permissions) {
 
         // on essaie les permisions pour ne garder que celles qui sont "saines"
           if (adminPerms.includes(perm)) {
-            editingPermissions.remove(perm);
             console.log(`permissions ${perm.bitfield.Flag} détéctée sur le rôle ${newRole.name} : permissions supprimée`)
+            editingPermissions.remove(perm);
             
             
             // eventuellement continuer avec un message.send
