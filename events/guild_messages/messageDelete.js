@@ -5,6 +5,8 @@ module.exports = {
     once: false,
 
     async execute(Izuna, message) {
+        if (message.guild.id != "926874968925548554");
+
         if (serverList.includes(message.guild.id)) {
 
             const guildSettings = await Izuna.getGuild(message.guild.id);
