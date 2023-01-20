@@ -40,20 +40,31 @@ module.exports = Izuna => {
             return userData;
 
         } else if (guildId === "1050197888094974013") {
-
+            const userData = await userDuGroupeXpData.findOne({ userId: memberId});
+            return userData;
         }
 
     
     }
 
-    Izuna.createUserXp = async (memberId) => {
-        const createUserXp = new userXpData({ userId: memberId });
-        createUserXp.save().then(g => console.log(`UserXP added! (${g.userId})`)).catch(err => console.log(err));
+    Izuna.createUserXp = async (memberId, guildId) => {
+        if (guildId === "1050197888094974013" || guildId == "926874968925548554") {
+            const createUserXp = new userDuGroupeXpData({ userId: memberId });
+            createUserXp.save().then(g => console.log(`UserXP added in the groupe! (${g.userId})`)).catch(err => console.log(err));
+        } else {
+            const createUserXp = new userXpData({ userId: memberId });
+            createUserXp.save().then(g => console.log(`UserXP added! (${g.userId})`)).catch(err => console.log(err));
+        }
+
     }
 
+    Izuna.create
 
-    Izuna.updateUserXp = async (memberId, memberSettings) => {
-        let userData = await Izuna.findUserXp(memberId);
+
+    Izuna.updateUserXp = async (memberId, memberSettings, guildId) => {
+        // pas besoin de modifier pour la conférence vu que le tri est déjà fait avec la fonction findUserXp()
+
+        let userData = Izuna.findUserXp(memberId, guildId)
 
         if (typeof userData != "object") userData  = {}
         for (const key in memberSettings) {
@@ -62,6 +73,7 @@ module.exports = Izuna => {
         }
         return userData.updateOne(userData);
     }
+
 
     Izuna.updateSecurityInfo = async (guildId, key, value) => {
         let guildSecurityData = await securityModel.findOne({ guildId: guildId });
@@ -97,4 +109,13 @@ module.exports = Izuna => {
 
         return guildSecurityData;
     }
+
+
+
+
+
+
+
+
+
 }
