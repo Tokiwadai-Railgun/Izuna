@@ -39,7 +39,7 @@ module.exports = Izuna => {
             const userData = await userXpData.findOne({ userId: memberId });
             return userData;
 
-        } else if (guildId === "1050197888094974013") {
+        } else if (guildId === "1050197888094974013" || guildId === "926874968925548554") {
             const userData = await userDuGroupeXpData.findOne({ userId: memberId});
             return userData;
         }
@@ -64,7 +64,7 @@ module.exports = Izuna => {
     Izuna.updateUserXp = async (memberId, memberSettings, guildId) => {
         // pas besoin de modifier pour la conférence vu que le tri est déjà fait avec la fonction findUserXp()
 
-        let userData = Izuna.findUserXp(memberId, guildId)
+        let userData = await Izuna.findUserXp(memberId);
 
         if (typeof userData != "object") userData  = {}
         for (const key in memberSettings) {

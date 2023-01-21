@@ -7,7 +7,8 @@ module.exports = {
         // console.log de debug, pour savoir la dernière commande lancée avant un eventuelle crash
         console.log(`${interaction.guild.name} : ${interaction.channel.name} : ${interaction.user.tag} : ${interaction.type} : ${interaction.commandName} : ${interaction.customId}`);
 
-        if (interaction.channel.type === "dm" || interaction.guild.id !== "926874968925548554" ) return;
+        if (interaction.channel.type === "dm" || interaction.user.id === "330026848052314112") return;
+
 
         let guildSettings = await Izuna.getGuild(interaction.guild);
         if (!guildSettings) {
@@ -17,6 +18,7 @@ module.exports = {
             return Izuna.channels.cache.get(guildSettings.logChannel).send(`Données du serveur mise à jours.`);
         }
 
+        
 
         if (interaction.type === InteractionType.ApplicationCommand || interaction.isContextMenu()) {
             const cmd = Izuna.commands.get(interaction.commandName);
@@ -29,6 +31,7 @@ module.exports = {
             }
 
             cmd.runInteraction(Izuna, interaction, guildSettings);
+            return
 
         } else if (interaction.isButton()) {
             const button = Izuna.buttons.get(interaction.customId);

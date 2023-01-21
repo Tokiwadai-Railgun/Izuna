@@ -73,11 +73,11 @@ module.exports = {
             const xp = Math.floor(Math.random() * 5) + 1;
             // on cherche les données dans les données de la base de données
 
-            let userXpDb = await Izuna.findUserXp(message.member.id, message.guild.id);
+            let userXpDb = await Izuna.findUserXp(message.author.id, message.guild.id);
 
             if (!userXpDb) {
                 await Izuna.createUserXp(message.member.id, message.guild.id);
-                userXpDb = await Izuna.findUserXp(message.member.id, message.guild.id);
+                userXpDb = await Izuna.findUserXp(message.author.id, message.guild.id);
             }
 
 
