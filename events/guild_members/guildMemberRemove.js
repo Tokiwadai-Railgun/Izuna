@@ -1,20 +1,20 @@
 const dayjs = require('dayjs');
-const { EmbedBuilder, Formatters } = require('discord.js');
+const { EmbedBuilder, Formatters, AuditLogEvent } = require('discord.js');
 
 module.exports = {
     name: "guildMemberRemove",
     once: false,
     async execute(Izuna, member) {
         const fetchGuild = await Izuna.getGuild(member.guild);
-        const fetchKickAuditLogs = await member.guild.fetchAuditLogs({ limit: 1, type: 'MEMBER_KICK' });
-        const fetchBanAuditLogs = await member.guild.fetchAuditLogs({ limit: 1, type: 'MEMBER_BAN_ADD' });
+        const fetchKickAuditLogs = await member.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.MemberKick });
+        const fetchBanAuditLogs = await member.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.MemberBanAdd });
 
         const kickLog = fetchKickAuditLogs.entries.first();
         const banLog = fetchBanAuditLogs.entries.first();
 
         const isBan = banLog != null && banLog.target.id === member.id;
         const isKick = kickLog != null && kickLog.target.id === member.id && kickLog.ti;
-        console.log(kickLog, banLog);
+
 
         if (member.guild.id !== "926874968925548554") return;
         const embed = new EmbedBuilder()

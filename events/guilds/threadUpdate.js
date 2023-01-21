@@ -6,6 +6,7 @@ module.exports = {
     name: "threadCreate",
     once: false,
     async execute(Izuna, oldThread, newThread) {
+        if (oldThread.guild.id != "926874968925548554");
         if (oldThread.guild.id === "926874968925548554") {
             if (oldThread.archived && !newThread.archived) {
                 console.log("1")

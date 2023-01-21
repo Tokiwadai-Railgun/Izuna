@@ -4,6 +4,8 @@ module.exports = {
     name: "messageReactionAdd",
     once: false,
     async execute(Izuna, reaction, user) {
+        if(reaction.guild.id != "926874968925548554")
+
         if (user.bot) return;
         const message = reaction.message;
         const member = message.guild.members.cache.get(user.id);

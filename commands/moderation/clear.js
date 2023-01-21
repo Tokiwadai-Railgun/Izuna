@@ -1,5 +1,7 @@
 const { EmbedBuilder, ApplicationCommandOptionType,PermissionsBitField } = require('discord.js');
 
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+
 module.exports = {
 	name: "clear",
 	aliases: ["purge", "ratio", "clean"],
@@ -63,7 +65,7 @@ module.exports = {
 		const amount = interaction.options.getNumber("amount");
 		const target = interaction.options.getMember("target");
 		if (amount < 2 || amount > 100) return interaction.reply("Veuillez indiquer un nombre de messages à supprimer entre 2 et 100");
-	
+
 		const fetched = await interaction.channel.messages.fetch({ limit: amount });
 
 		if (target) {
@@ -73,11 +75,22 @@ module.exports = {
 				if (msg.author.id === target.id) targetMessages.push(msg); i++;
 			});
 
-			await interaction.channel.bulkDelete(targetMessages, true).then(msg => {interaction.reply(`${msg.size} messages de ${target} ont été supprimés`)});
+			await interaction.channel.bulkDelete(targetMessages, true).then(msg => {const response = interaction.reply(`${msg.size} messages de ${target} ont été supprimés`)});
+		
+			await delay(1500)
+			response.delete()
 		} else {
 			const messages = fetched;
-			await interaction.channel.bulkDelete(messages, true).then(msg => {interaction.reply( msg.size > 1 ? `${msg.size} messages ont été supprimés` : `${msg.size} message a été supprimé`)});
+			await interaction.channel.bulkDelete(messages, true).then(async msg => {
+				const response = interaction.reply( msg.size > 1 ? `${msg.size} messages ont été supprimés` : `${msg.size} message a été supprimé`)
+		
+				await delay(1500)
+				response.delete()
+		});
+
 		}
+
+		
 	
 	}
 }

@@ -10,7 +10,6 @@ module.exports = {
         console.log(`${message.guild.name} : ${message.author.tag} : ${message.content} | Embed : ${message.embeds.length}`);
 
         if (message.channel.type === "dm") return;
-        if (message.guild.id != "926874968925548554") return;
 
         let guildSettings = await Izuna.getGuild(message.guild);
         if (!guildSettings) {
@@ -63,22 +62,22 @@ module.exports = {
                     message.reply(`Bravo, vous avez atteint le niveau ${memberLevel} !`);
                 }
 
-                Izuna.updateUserXp(message.member.id, { userXp: memberXp, userLevel: memberLevel });
+                Izuna.updateUserXp(message.member.id, { userXp: memberXp, userLevel: memberLevel }, message.guild.id);
             }
         }
 
 
         // xp pour le serveur de la conférence 
 
-        if (message.guild.id === "1050197888094974013") {
+        if (message.guild.id === "1050197888094974013" || message.guild.id === "926874968925548554") {
             const xp = Math.floor(Math.random() * 5) + 1;
             // on cherche les données dans les données de la base de données
 
-            let userXpDb = await Izuna.findUserDuGroupeXp(message.member.id, guild.id);
+            let userXpDb = await Izuna.findUserXp(message.author.id, message.guild.id);
 
             if (!userXpDb) {
-                await Izuna.createUserXp(message.member.id);
-                userXpDb = await Izuna.findUserDuGroupeXp(message.member.id, guild.id);
+                await Izuna.createUserXp(message.member.id, message.guild.id);
+                userXpDb = await Izuna.findUserXp(message.author.id, message.guild.id);
             }
 
 
@@ -96,11 +95,13 @@ module.exports = {
                     message.reply(`Bravo, vous avez atteint le niveau ${memberLevel} !`);
                 }
 
-                Izuna.updateUserXp(message.member.id, { userXp: memberXp, userLevel: memberLevel });
+                Izuna.updateUserXp(message.member.id, { userXp: memberXp, userLevel: memberLevel }, message.guild.id);
+                console.log("1")
             }
 
         }
 
+        if (message.guild.id != "926874968925548554") return;
 
         // commande
 
