@@ -16,5 +16,6 @@ module.exports = {
         Izuna.user.setPresence({activities: [{ name: "izu help", type:"LISTENING" }], status: "online"});
 
         // commandes global ~1h d'attente avant maj
+
     }
 }

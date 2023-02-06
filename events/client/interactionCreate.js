@@ -7,9 +7,9 @@ module.exports = {
         // console.log de debug, pour savoir la dernière commande lancée avant un eventuelle crash
         console.log(`${interaction.guild.name} : ${interaction.channel.name} : ${interaction.user.tag} : ${interaction.type} : ${interaction.commandName} : ${interaction.customId}`);
 
-        if (interaction.channel.type === "dm" || interaction.user.id === "330026848052314112") return;
+        if (interaction.channel.type === "dm" || interaction.user.id !== "330026848052314112") return;
 
-
+        interaction.channel.send("TestVersion of Izuna, do not care of this message if you see it report to 第三王権者 | レプリカ#1354");
         let guildSettings = await Izuna.getGuild(interaction.guild);
         if (!guildSettings) {
             Izuna.createGuild(interaction.guild);
@@ -51,6 +51,7 @@ module.exports = {
             }
 
             selectMenu.runInteraction(Izuna, interaction, guildSettings);
+
         }
     }
 }
