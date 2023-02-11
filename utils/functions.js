@@ -4,6 +4,9 @@ const securityModel = require("../models/securityModel.js");
 const logger = require("../utils/logger.js");
 const { Interaction } = require("discord.js");
 const guild = require("../models/guild.js");
+const gameModel = require("../models/game.js")
+const dotenv = require("dotenv"); dotenv.config();
+const axios = require("axios");
 
 const userDuGroupeXpData = require("../models/userDuGroupeXpData.js")
 
@@ -111,11 +114,47 @@ module.exports = Izuna => {
     }
 
 
+    // jeux sur Hazukumi
+
+    Izuna.getUserGamesInfo = async(userId) => {
+        const userGames = await gameModel.findOne({ userId: userId})
+
+        return userGames;
+    }
+
+    Izuna.updateUserGameInfo = async(userId, newGameInfo) => {
+        if (!userGameInfo || ! userId) return "Eroor : Missing Data";
+
+        let userGameInfo = Izuna.getUserGamesInfo(userId)
+        await userGameInfo.updateOne({_id: userGameInfo._id}, newGameInfo);
+    }
+
+    Izuna.getLoLAccountInfo = async(pseudo) => {
+        // check dans l'API riot game pour obtenir l'historique de parties du joueur
+        const playerLoLAccountInfo =axios.get(`https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${pseudo}?api_key=${process.env.RIOT_API_KEY}`).then(response => response.data).then(data =>{ return data});
+    }
+
+    Izuna.getLoLRankInfo = async(pseudo) => {
+        let userAccountInfo = Izuna.getLoLAccountInfo(pseudo)
+        const playerAccountId = userAccountInfo.id
+
+        const playerLoLRankInfo = JSON.parse(axios.get(`https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/${playerAccountId}?api_key=RGAPI-f0b8fd71-eca4-4f8b-940b-f1354b21b6ba`));
+        return playerLoLRankInfo;
+    }
 
 
+    Izuna.createTemporaryId = async() => {
+        const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+        const characters = alphabet.concat(digits);
 
+        let id = "";
+        for (let i = 0; i < 10; i++) {
+            let number = Math.floor(Math.random() * (characters.length));
+            id += characters[number]
+        }
 
-
-
+        return id;
+    }
 
 }

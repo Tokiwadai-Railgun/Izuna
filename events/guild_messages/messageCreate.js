@@ -52,17 +52,19 @@ module.exports = {
 
                 let memberXp = userXpDb.userXp + xp;
                 let memberLevel = userXpDb.userLevel;
+                let memberCoins = userXpDb.userCoins
 
                 const memberNeedeedXP = userXpDb.userLevel * 60;
 
                 if (memberXp >= memberNeedeedXP) {
                     memberLevel++;
+
                     memberXp -= memberNeedeedXP;
 
                     message.reply(`Bravo, vous avez atteint le niveau ${memberLevel} !`);
                 }
 
-                Izuna.updateUserXp(message.member.id, { userXp: memberXp, userLevel: memberLevel }, message.guild.id);
+                Izuna.updateUserXp(message.member.id, { userXp: memberXp, userLevel: memberLevel, userCoins: memberCoins }, message.guild.id);
             }
         }
 
@@ -85,6 +87,7 @@ module.exports = {
 
                 let memberXp = userXpDb.userXp + xp;
                 let memberLevel = userXpDb.userLevel;
+                let memberCoins = userXpDb.userCoins
 
                 const memberNeedeedXP = userXpDb.userLevel * 60;
 
@@ -95,7 +98,7 @@ module.exports = {
                     message.reply(`Bravo, vous avez atteint le niveau ${memberLevel} !`);
                 }
 
-                Izuna.updateUserXp(message.member.id, { userXp: memberXp, userLevel: memberLevel }, message.guild.id);
+                Izuna.updateUserXp(message.member.id, { userXp: memberXp, userLevel: memberLevel, userCoins: memberCoins }, message.guild.id);
                 console.log("1")
             }
 
