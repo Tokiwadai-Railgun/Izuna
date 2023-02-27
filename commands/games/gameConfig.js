@@ -58,8 +58,8 @@ module.exports = {
 
         // Selon le jeu paramétrer les différentes
 
-
         switch (game) {
+            
             case "LoL" :
                 // check de la véracité du pseudo.
                 const playerAccountInfo = Izuna.getLoLAccountInfo(pseudo);
@@ -67,7 +67,7 @@ module.exports = {
                 // sécurité, on demande un changement de status pour vérifier que l'utilisateur est bien pocesseur du compte
 
                 const filter = (reaction, user) => {
-                    return(reaction.emoji.name === "check") && user.id === interaction.user.id;
+                    return(reaction.emoji.name === "check");
                 }
                 const message = await interaction.reply({ fetchReply: true, content : "Veuillez chancer votre photo de profile en la photo ci dessous puis cliquer sur la réaction", files: [ {attachment: "./Images/LoL/10.10.3224670/img/profileicon/1.png", name: "summonerIcon1.png"}]});
                 message.react("✅");
@@ -89,14 +89,14 @@ module.exports = {
 
                     // sinon on return
                 }).catch( err => {
-                    interaction.reply("Commande annulée")
+                    interaction.channel.send("Commande annulée")
                     return console.log("Commande gameConfig - LoL annumée, code d'erreur : " + err);
                 })
                 // une fois que tout est ok on change les valeurs .
-
+                break;
 
             default :
-                interaction.reply("Jeu inconnus")
+                interaction.channel.send("Jeu inconnus")
 
         }
 

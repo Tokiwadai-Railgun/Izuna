@@ -138,7 +138,7 @@ module.exports = Izuna => {
         let userAccountInfo = Izuna.getLoLAccountInfo(pseudo)
         const playerAccountId = userAccountInfo.id
 
-        const playerLoLRankInfo = JSON.parse(axios.get(`https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/${playerAccountId}?api_key=RGAPI-f0b8fd71-eca4-4f8b-940b-f1354b21b6ba`));
+        const playerLoLRankInfo = JSON.parse(axios.get(`https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/${playerAccountId}?api_key=${process.env.RIOT_API_KEY}`));
         return playerLoLRankInfo;
     }
 
