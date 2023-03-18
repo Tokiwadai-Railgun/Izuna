@@ -1,3 +1,5 @@
+	// tentative en pause, réflexion nécessaire à comment on attribue les points plus tards.
+
 const { ReactionUserManager, InteractionWebhook, EmbedBuilder, ApplicationCommandOptionType, PermissionsBitField } = require("discord.js");
 const userGamesInfoModel = require("../../models/game.js")
 
@@ -70,7 +72,7 @@ module.exports = {
                     return(reaction.emoji.name === "check");
                 }
                 const message = await interaction.reply({ fetchReply: true, content : "Veuillez chancer votre photo de profile en la photo ci dessous puis cliquer sur la réaction", files: [ {attachment: "./Images/LoL/10.10.3224670/img/profileicon/1.png", name: "summonerIcon1.png"}]});
-                message.react("✅");
+                await message.react("✅");
                 message.awaitReactions({
                     filter,
                     max: 1,
@@ -81,10 +83,12 @@ module.exports = {
                     // si ça correspond alors tout est ok et on envoie les données dans la BDD
                     // pour check on définie le truc dans une variable,
 
-                    if (playerAccountInfo.profileIconId == "Trouver l'ID des icones" ) {
+                    if (playerAccountInfo.profileIconId === "1" ) {
                         userGamesInfo.leagueOfLegends.pseudo =  pseudo;
-                        return interaction.reply(`Données mise à jours, compte League of Legends ajouté : ${pseudo}`)
+                        return interaction.channel.send(`Données mise à jours, compte League of Legends ajouté : ${pseudo}`)
                         // transformer ce message en image.
+                    } else {
+                        return interaction.channel.send("Photo de profile différente de celle demandée, commande annulée")
                     }
 
                     // sinon on return

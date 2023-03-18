@@ -132,6 +132,7 @@ module.exports = Izuna => {
     Izuna.getLoLAccountInfo = async(pseudo) => {
         // check dans l'API riot game pour obtenir l'historique de parties du joueur
         const playerLoLAccountInfo =axios.get(`https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${pseudo}?api_key=${process.env.RIOT_API_KEY}`).then(response => response.data).then(data =>{ return data});
+        return playerLoLAccountInfo;
     }
 
     Izuna.getLoLRankInfo = async(pseudo) => {

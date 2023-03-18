@@ -15,7 +15,7 @@ module.exports = {
             .setImage(member.user.displayAvatarURL())
             .setThumbnail()
             .addFields([
-                { name: "Nom", value: `${member.displayName}, inline: true` },
+                { name: "Nom", value: `${member.displayName}, Online: true` },
                 { name: "Modérateur", value: `${member.kickable ? "🔴" : "🟢"}`, inline: true },
                 { name: "Bot", value:`${member.user.bot? '🟢' : '🔴'}`, inline: true },
                 { name: "Rôles", value: `${member.roles.cache.map(roles => roles).join(", ")}`, inline: true },
