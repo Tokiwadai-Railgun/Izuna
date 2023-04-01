@@ -9,6 +9,6 @@ module.exports = {
     runInteraction: async (Izuna, interaction) => {
         const member = await interaction.guild.members.fetch(interaction.targetId);
         
-        interaction.reply(member.user.avatar);
+        interaction.reply(member.user.displayAvatarURL());
     }
 }

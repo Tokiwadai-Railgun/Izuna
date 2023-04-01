@@ -132,13 +132,14 @@ module.exports = Izuna => {
     Izuna.getLoLAccountInfo = async(pseudo) => {
         // check dans l'API riot game pour obtenir l'historique de parties du joueur
         const playerLoLAccountInfo =axios.get(`https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${pseudo}?api_key=${process.env.RIOT_API_KEY}`).then(response => response.data).then(data =>{ return data});
+        return playerLoLAccountInfo;
     }
 
     Izuna.getLoLRankInfo = async(pseudo) => {
         let userAccountInfo = Izuna.getLoLAccountInfo(pseudo)
         const playerAccountId = userAccountInfo.id
 
-        const playerLoLRankInfo = JSON.parse(axios.get(`https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/${playerAccountId}?api_key=RGAPI-f0b8fd71-eca4-4f8b-940b-f1354b21b6ba`));
+        const playerLoLRankInfo = JSON.parse(axios.get(`https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/${playerAccountId}?api_key=${process.env.RIOT_API_KEY}`));
         return playerLoLRankInfo;
     }
 
