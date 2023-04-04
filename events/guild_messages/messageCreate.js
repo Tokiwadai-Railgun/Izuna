@@ -44,7 +44,7 @@ module.exports = {
 
             if (!userXpDb) {
                 await Izuna.createUserXp(message.member.id, message.guild.id);
-                userXpDb = await Izuna.findUserXp(message.member.id);
+                userXpDb = await Izuna.findUserXp(message.member.id, message.guild.id);
             }
 
 

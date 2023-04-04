@@ -67,7 +67,7 @@ module.exports = Izuna => {
     Izuna.updateUserXp = async (memberId, memberSettings, guildId) => {
         // pas besoin de modifier pour la conférence vu que le tri est déjà fait avec la fonction findUserXp()
 
-        let userData = await Izuna.findUserXp(memberId);
+        let userData = await Izuna.findUserXp(memberId, guildId);
 
         if (typeof userData != "object") userData  = {}
         for (const key in memberSettings) {

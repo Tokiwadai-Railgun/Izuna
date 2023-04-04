@@ -12,7 +12,7 @@ module.exports = {
     async run(Izuna, message, args, guildSettings) {
         if (!serverList.find(e => e === message.guild.id)) return message.reply("Commande indisponnible sur le serveur.");
 
-        const dbStats = await Izuna.findUserXp(message.author.id);
+        const dbStats = await Izuna.findUserXp(message.author.id, message.guild.id);
 
         if (!dbStats) {
             return
@@ -35,7 +35,7 @@ module.exports = {
     async runInteraction(Izuna, interaction, guildSettings) {
         if (!serverList.find(e => e === interaction.guild.id)) return interaction.reply("Commande indisponnible sur le serveur.");
 
-        const dbStats = await Izuna.findUserXp(interaction.user.id);
+        const dbStats = await Izuna.findUserXp(interaction.user.id, interaction.guild.id);
 
         if (!dbStats) {
             return

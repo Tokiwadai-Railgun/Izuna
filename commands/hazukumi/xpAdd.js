@@ -12,9 +12,9 @@ module.exports = {
         if (!message.mentions || !message.mentions.users) return message.channel.send("Merci de préciser un utilisateur");
 
 
-        let userDbInfo = await Izuna.findUserXp(message.mentions.users.first().id);
-        if (!userDbInfo) Izuna.createUserXp(message.mentions.users.first().id);
-        userDbInfo = await Izuna.findUserXp(message.mentions.users.first().id);
+        let userDbInfo = await Izuna.findUserXp(message.mentions.users.first().id, message.guild.id);
+        if (!userDbInfo) Izuna.createUserXp(message.mentions.users.first().id, message.guild.id);
+        userDbInfo = await Izuna.findUserXp(message.mentions.users.first().id, message.guild.id);
 
         userDbInfo.userXp += parseInt(args[1]);
 
@@ -28,7 +28,7 @@ module.exports = {
             memberNeedeedXP = userDbInfo.userLevel * 60;
         }
 
-        await Izuna.updateUserXp(message.mentions.users.first().id, userDbInfo);
+        await Izuna.updateUserXp(message.mentions.users.first().id, userDbInfo, message.guild.id);
 
 
 
@@ -68,9 +68,9 @@ module.exports = {
         const user = await interaction.options.getUser("user");
 
 
-        let userDbInfo = await Izuna.findUserXp(user.id);
-        if (!userDbInfo) Izuna.createUserXp(user.id);
-        userDbInfo = await Izuna.findUserXp(user.id);
+        let userDbInfo = await Izuna.findUserXp(user.id, interaction.guild.id);
+        if (!userDbInfo) Izuna.createUserXp(user.id, interaction.guild.id);
+        userDbInfo = await Izuna.findUserXp(user.id, interaction.guild.id);
 
         userDbInfo.userXp += parseInt(amount);
 
@@ -84,7 +84,7 @@ module.exports = {
             memberNeedeedXP = userDbInfo.userLevel * 60;
         }
 
-        await Izuna.updateUserXp(user.id, userDbInfo);
+        await Izuna.updateUserXp(user.id, userDbInfo, interaction.guild.id);
 
 
 
