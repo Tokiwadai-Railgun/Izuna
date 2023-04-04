@@ -9,21 +9,24 @@ module.exports = {
 	usage: "clear <amount> [target] (optionel)",
 	permissions :[PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ManageMessages],
 	description: "Supprime un certain nombre de messages, peut être complété avec une mention",
-	run: async (Izuna, message, args) => {
+	run: async (Izuna, message, args, guildSettings) => {
 		const userMention = message.mentions.members.first();
 		const amount = parseInt(args[0]) + 1; // +1 pour le message de commande
-		const logChannel = Izuna.channels.cache.get('982934381087826000');
+		const logChannel = Izuna.channels.cache.get(guildSettings.logChannel)
 
 		if(!amount || amount <= 2 || amount > 100) return logChannel.send("Veuillez indiquer un nombre de messages à supprimer entre 2 et 100");
 
-		// création de l'embed pour la log
+
 		const logEmbed = new EmbedBuilder()
-			.setColor("#ff0000")
-			.setTitle("Suppression de messages")
-			.setDescription( userMention ? `${message.author} a supprimé ${amount - 1} messages de ${userMention}.` : `${message.author} a supprimé ${amount - 1} messages.`)
-			.addFields([{name: "Channel", value: message.channel.toString()}])
-			.setTimestamp()
-			.setFooter({ text: message.author.tag, iconURL: message.author.displayAvatarURL() });	
+		if (logChannel) {
+			logEmbed.setColor("#ff0000")
+			logEmbed.setTitle("Suppression de messages")
+			logEmbed.setDescription( userMention ? `${message.author} a supprimé ${amount - 1} messages de ${userMention}.` : `${message.author} a supprimé ${amount - 1} messages.`)
+			logEmbed.addFields([{name: "Channel", value: message.channel.toString()}])
+			logEmbed.setTimestamp()
+			logEmbed.setFooter({ text: message.author.tag, iconURL: message.author.displayAvatarURL() });
+		}
+
 			
 			
 			
@@ -61,9 +64,11 @@ module.exports = {
 			required: false
 		}
 	],
-	runInteraction: async (Izuna, interaction) => {
+	runInteraction: async (Izuna, interaction, guildSettings) => {
 		const amount = interaction.options.getNumber("amount");
 		const target = interaction.options.getMember("target");
+
+		const logChannel = Izuna.channels.cache.get(guildSettings.logChannel)
 		if (amount < 2 || amount > 100) return interaction.reply("Veuillez indiquer un nombre de messages à supprimer entre 2 et 100");
 
 		const fetched = await interaction.channel.messages.fetch({ limit: amount });
@@ -82,15 +87,27 @@ module.exports = {
 		} else {
 			const messages = fetched;
 			await interaction.channel.bulkDelete(messages, true).then(async msg => {
-				const response = interaction.reply( msg.size > 1 ? `${msg.size} messages ont été supprimés` : `${msg.size} message a été supprimé`)
-		
-				await delay(1500)
-				response.delete()
-		});
+				const response = await interaction.reply( {content : msg.size > 1 ? `${msg.size} messages ont été supprimés` : `${msg.size} message a été supprimé`, fetchReply: true})
+					.then(async response => {
+						await delay(1000)
+						.then(response.delete())
+
+						if (!logChannel) return
+						const logEmbed = new EmbedBuilder()
+						.setColor("#ff0000")
+						.setTitle("Suppression de messages")
+						.setDescription( target ? `${interaction.user} a supprimé ${amount - 1} messages de ${userMention}.` : `${interaction.user} a supprimé ${amount - 1} messages.`)
+						.addFields([{name: "Channel", value: interaction.channel.toString()}])
+						.setTimestamp()
+						.setFooter({ text: interaction.user.tag, iconURL: interaction.user.displayAvatarURL() });
+
+						logChannel.send({embeds: [logEmbed]})
+					});
+			});
 
 		}
 
 		
-	
+		
 	}
 }
