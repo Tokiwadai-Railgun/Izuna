@@ -76,8 +76,6 @@ module.exports = {
               }
             }
             index ++;
-          } 
-        })
-        .catch(console.error);
-    }
+          })
+        }
 }
