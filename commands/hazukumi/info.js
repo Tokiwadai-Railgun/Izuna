@@ -1,5 +1,5 @@
 const { ReactionUserManager, InteractionWebhook, EmbedBuilder, PermissionsBitField } = require("discord.js");
-const serverList = [ "926874968925548554", "732692494621605909" ]
+const serverList = [ "926874968925548554", "732692494621605909", "1050197888094974013" ]
 
 module.exports = {
     name: "info",
@@ -35,7 +35,7 @@ module.exports = {
     async runInteraction(Izuna, interaction, guildSettings) {
         if (!serverList.find(e => e === interaction.guild.id)) return interaction.reply("Commande indisponnible sur le serveur.");
 
-        const dbStats = await Izuna.findUserXp(interaction.user.id);
+        const dbStats = await Izuna.findUserXp(interaction.user.id, interaction.guild.id);
 
         if (!dbStats) {
             return

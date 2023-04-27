@@ -3,7 +3,7 @@ const { EmbedBuilder } = require('discord.js');
 module.exports = {
     name: "danger-button",
     runInteraction: async (Izuna, interaction) => {
-        const tryPong = await interaction.reply({content: "On essaye de pong .... un instant !", fetchReply: true}); 
+        const tryPong = await interaction.reply({content: "On essaye de pong .... un instant !"}); 
 
         const embed = new EmbedBuilder()
         .setColor('#0099ff')

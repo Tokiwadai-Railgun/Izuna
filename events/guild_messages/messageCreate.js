@@ -1,10 +1,18 @@
 const { Permissions, SlashCommandSubcommandGroupBuilder } = require("discord.js");
 const guild = require("../../models/guild");
+const patchNote = require("../../utils/handlers/patchNoteHandler")
 
 module.exports = {
     name: "messageCreate",
     once: false,
     async execute(Izuna, message) {
+
+
+        if (message.channel.id === "926874969399500804") { // 1080789093144866856
+            patchNote(message);
+        }
+
+
 
         // console.log de debug, pour savoir la dernière commande lancée avant un eventuelle crash
         console.log(`${message.guild.name} : ${message.author.tag} : ${message.content} | Embed : ${message.embeds.length}`);

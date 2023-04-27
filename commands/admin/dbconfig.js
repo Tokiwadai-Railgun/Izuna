@@ -1,4 +1,5 @@
 const { ReactionUserManager, InteractionWebhook, ApplicationCommandOptionType, PermissionsBitField } = require("discord.js");
+const guild = require("../../models/guild");
 module.exports = {
     name: "dbconfig",
     category: "admin",
@@ -72,6 +73,11 @@ module.exports = {
                     name: "wlcChannel",
                     value: "wlcChannel",
                     description: "Le channel de bienvenue du serveur."
+                },
+                {
+                    name: "memberRole",
+                    value:"memberRole",
+                    description: "le rôle attribué à chaque membre lors-ce qu'il accepte les règles (fournir une ID)"
                 }
             ]
         },
@@ -107,7 +113,12 @@ module.exports = {
                 await Izuna.updateGuild(interaction.guild, { wlcChannel: value })
                 return interaction.reply({content: `Le nouveau channel de bienvenue est : ${interaction.guild.channels.cache.get(value)}`});
             }
-        } 
+        } else if (key === "memberRole") {
+            if (!value) return interaction.reply({ content: `Le rôle membre est désormais : ${interaction.guild.roles.cache.get(guildSettings.memberRole)}` })
+            if (!interaction.guild.roles.cache.get(value)) return interaction.reply("Id de rôle non valide")
+            await Izuna.updateGuild(interaction.guild, {memberRole: value})
+            return interaction.reply("Le rôle membre à été mis à jours.")
+        }
         
         else {
             interaction.reply("Clef invalide")

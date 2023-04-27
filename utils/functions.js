@@ -2,7 +2,7 @@ const Guild = require("../models/guild.js");
 const userXpData = require("../models/userXpData.js");
 const securityModel = require("../models/securityModel.js");
 const logger = require("../utils/logger.js");
-const { Interaction } = require("discord.js");
+const { Interaction, EmbedBuilder} = require("discord.js");
 const guild = require("../models/guild.js");
 const gameModel = require("../models/game.js")
 const dotenv = require("dotenv"); dotenv.config();
@@ -67,7 +67,7 @@ module.exports = Izuna => {
     Izuna.updateUserXp = async (memberId, memberSettings, guildId) => {
         // pas besoin de modifier pour la conférence vu que le tri est déjà fait avec la fonction findUserXp()
 
-        let userData = await Izuna.findUserXp(memberId);
+        let userData = await Izuna.findUserXp(memberId, guildId);
 
         if (typeof userData != "object") userData  = {}
         for (const key in memberSettings) {
@@ -158,4 +158,17 @@ module.exports = Izuna => {
         return id;
     }
 
+
+
+
+    // Auto Annonce dans Maj-Izuna
+
+    Izuna.patchNote = async(title, message, author) => {
+        // création d'un embed
+        const patchNoteEmbed = new EmbedBuilder()
+            .setColor("#6f28af")
+            .setTitle(title)
+            .setAuthor({ name : author.tag, iconUrl: author.displayAvatarURL() })
+
+    }
 }
