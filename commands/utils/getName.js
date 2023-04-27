@@ -1,4 +1,4 @@
-const { EmbedBuilder, PermissionsBitField } = require('discord.js');
+const { EmbedBuilder, PermissionsBitField, ApplicationCommandOptionType } = require('discord.js');
 
 module.exports = {
     name: "getname",
@@ -35,11 +35,20 @@ module.exports = {
 
         message.channel.send({ embeds: [embed] });
         },
-    runInteraction: async (Izuna, interaction) => {
-        if (!args[0]) return message.channel.send('Merci de préciser un ID');
+        options: [
+            {
+                name: "user",
+                description: "l'ID de l'utilisateur",
+                type: ApplicationCommandOptionType.String,
+                required: true
 
-        const user = await Izuna.users.fetch(args[0]);
-        if (!user) return message.channel.send('Cet ID n\'existe pas');
+            }
+        ],
+    runInteraction: async (Izuna, interaction) => {
+        const userID = interaction.options.getString("user")
+
+        const user = await Izuna.users.fetch(userID);
+        if (!user) return interaction.r('Cet ID n\'existe pas');
 
         const embed = new EmbedBuilder()
             .setTitle(`Informations sur ${user.tag}`)
@@ -48,17 +57,10 @@ module.exports = {
                 { name: "Nom d'utilisateur :", value: `${user.username} (${user.id})` },
                 { name: "Date de création du compte", value: `<t:${parseInt(user.createdTimestamp / 1000)}:f>` },
                 { name: "Bot?", value: user.bot? "Oui" : "Non" },
-                { name: "Serveur", value: message.guild.members.cache.get(user.id).guild.name? `L'utilisateur est dans le serveur (${user})` : "L'utilisateur n'est pas dans ce serveur" },
+                { name: "Serveur", value: interaction.guild.members.cache.get(user.id).guild.name? `L'utilisateur est dans le serveur (${user})` : "L'utilisateur n'est pas dans ce serveur" },
                 ])
 
-
-
-        const pingedMember = message.guild.members.cache.get(args[0])
-        if (message.guild.members.cache.get(user.id)) {
-            embed.addFields([
-                { name: "Status : ", value: `${pingedMember.roles.highest}` },
-                { name: "Rejoint le : ", value: `<t:${parseInt(pingedMember.joinedTimestamp / 1000)}:f>` }
-            ])
-        }
+        interaction.reply({ embeds: [embed] })
+        
     }
 }
