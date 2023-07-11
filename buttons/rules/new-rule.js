@@ -1,4 +1,4 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, PermissionsBitField } = require('discord.js');
 
 const titleEmbed = new EmbedBuilder()
     .setTitle("Entrez le titre de la règle")
@@ -17,6 +17,7 @@ const row = new ActionRowBuilder()
     
 module.exports = {
     name: "new-rule",
+    permissions: PermissionsBitField.Administrator,
     runInteraction: async (Izuna, interaction, guildSettings) => {
         // Envoie un embed demandant le titre de la règle
         interaction.reply({ embeds: [titleEmbed], })

@@ -8,7 +8,13 @@ const guildShema = mongoose.Schema({
     wlcChannel: { "type": String, "default": "926874969210777682" },
     warnChannel: { "type": String, "default": "926874969210777682" },
     rulesMessage:{ "type":String  },
-    memberRole:{ "type": String }
+    memberRole:{ "type": String },
+    ticketStatus: {"type": String, "default": "off"},
+    ticketChannel: {"type": String},
+    ticketping: { "type": String, "default": "on" },
+    ticketCategory: { "type": String },
+    recrutementStatus: { "type": String },
+    recrutementChannel: { "type": String }
 });
 
 module.exports = mongoose.model('Guild', guildShema); 

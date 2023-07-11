@@ -34,6 +34,8 @@ module.exports = {
         } else if (interaction.isButton()) {
             const button = Izuna.buttons.get(interaction.customId);
 
+            if (!interaction.member.permissions.has(button.permissions)) return interaction.reply("Vous n'avez pas les permissions pour utiliser cette commande.");
+
             if (!button) {
                 console.log(`[ERROR] Button ${interaction.customId} not found`);
                 interaction.reply("Bouton introuvable");

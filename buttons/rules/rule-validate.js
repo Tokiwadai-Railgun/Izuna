@@ -1,8 +1,9 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, PermissionsBitField } = require('discord.js');
 
     
 module.exports = {
     name: "rule-validate",
+    permissions: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages],
     runInteraction: async (Izuna, interaction, guildSettings) => {
     // on ajoute le rôle si la personne ne l'a pas déjà.
     const role = interaction.guild.roles.cache.get(guildSettings.memberRole)

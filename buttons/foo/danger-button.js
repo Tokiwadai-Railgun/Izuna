@@ -1,7 +1,8 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 
 module.exports = {
     name: "danger-button",
+    permissions: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages],
     runInteraction: async (Izuna, interaction) => {
         const tryPong = await interaction.reply({content: "On essaye de pong .... un instant !"}); 
 

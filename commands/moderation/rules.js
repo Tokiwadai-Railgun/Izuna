@@ -20,11 +20,11 @@ const validateButtonRow = new ActionRowBuilder()
     .setComponents(validateButton)
 
 module.exports = {
-    name: "rule",
+    name: "rules",
     aliases: ["rules",],
     usage: "izu rule -> échange de mesages",
     category: "moderation",
-    permissions :[PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.Administrator],
+    permissions :[PermissionsBitField.Flags.Administrator],
     description: "Annonce un message à tous les membres du serveur sous forme d'un Embed.",
     run: (Izuna, message, args) => {
         message.channe.send("Commande uniquement disponnible en /command poour le moment")

@@ -62,13 +62,12 @@ module.exports = {
         const logChannel = Izuna.channels.cache.get("926874969399500804")
 
         // vérifications des arguments et de la mention
-        const user = interaction.options.getMember(target);
-        const duration = interaction.options.getString(duration);
-        const reason = interaction.options.getString(reason) || "Aucune raison spécifiée.";
+        const user = interaction.options.getMember("target");
+        const duration = interaction.options.getString("duration");
+        const reason = interaction.options.getString("reason") || "Aucune raison spécifiée.";
         const convertedTime = ms(duration);
 
         if (!user) return interaction.reply("Utilisateur non spécifié ou invalide.");
-        if (!args[1] || !args[2]) return interaction.reply("Durée non spécifiée.");
         if (!duration || !convertedTime) return interaction.reply("Durée non spécifiée ou invalide.");
 
         if (!user.moderatable) return interaction.reply("Utilisateur non mutable")

@@ -61,9 +61,6 @@ module.exports = Izuna => {
 
     }
 
-    Izuna.create
-
-
     Izuna.updateUserXp = async (memberId, memberSettings, guildId) => {
         // pas besoin de modifier pour la conférence vu que le tri est déjà fait avec la fonction findUserXp()
 

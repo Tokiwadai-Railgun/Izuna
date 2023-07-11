@@ -1,7 +1,8 @@
-const { EmbedBuilder, Message } = require('discord.js');
+const { EmbedBuilder, Message, PermissionsBitField } = require('discord.js');
 
 module.exports = {
     name: "random_role_add",
+    permissions: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages],
     runInteraction: async (Izuna, interaction) => {
         const role = interaction.guild.roles.cache.get("926874969009422357");
         const member = interaction.member

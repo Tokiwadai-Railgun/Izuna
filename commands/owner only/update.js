@@ -11,11 +11,13 @@ module.exports = {
     permissions: [PermissionsBitField.Flags.Administrator],
     description: "Simule un évènement au choix.",
     async run(Izuna, message, args) {
-        await Guild.updateMany({}, { $set: { "memberRole": "" }, upsert: true });
+        await Guild.updateMany({}, { $set: { "": "" }, upsert: true });
         message.reply("Donnée mise à jours.");
     },
     async runInteraction(Izuna, interaction) {
-        await Guild.updateMany({}, { $set: { "memberRole": "" }, upsert: true });
+        await Guild.updateMany({}, { $set: { "": "" }, upsert: true });
+
+
         interaction.reply("Donnée mise à jours.");
     }
 }
