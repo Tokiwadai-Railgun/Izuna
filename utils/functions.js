@@ -168,4 +168,20 @@ module.exports = Izuna => {
             .setAuthor({ name : author.tag, iconUrl: author.displayAvatarURL() })
 
     }
+
+    Izuna.staffRoleEdit = async(guildId, setting) => {
+        // actions can be add / delete
+        // setting regroupe le poste à modifier et la rôle ex : { "moderatorRole": "02470321206557836" }
+
+        let guildData = await Izuna.getGuild(guildId);
+
+        if (typeof guildData != "object") guildData  = {}  
+        
+        for (const key in setting) {
+            if (guildData[key] != setting[key]) guildData[key] = setting[key];
+        }
+
+        return guildData.updateOne(setting);
+        
+    }
 }
