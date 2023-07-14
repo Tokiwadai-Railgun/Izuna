@@ -19,6 +19,11 @@ module.exports = {
         channel.setParent(interaction.guild.channels.cache.get(guildSettings.ticketCategory))
         channel.permissionOverwrites.create(interaction.guild.roles.everyone, {"ViewChannel": false})
         channel.permissionOverwrites.create(interaction.user.id, {"ViewChannel": true})
+        // check si rôle modérateur puis ajout si il y a 
+        const moderatorRole = interaction.guild.roles.cache.get(guildSettings.moderatorRole)
+        if (moderatorRole) {
+            channel.permissionOverwrites.create(moderatorRole, {"ViewChannel": true})
+        }
 
 
         // envoie d'un embed pour fermer 
