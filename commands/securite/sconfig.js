@@ -4,7 +4,7 @@ const userXpData = require("../../models/userXpData");
 
 module.exports = {
     name: "security_config",
-    category: "admin",
+    category: "securite",
     aliases: ["sconfig"],
     usage: "securityconfig <key> [value]",
     specialArgs: ["status","spamProtectStatus","adminRoles","adminMembers", "(correspod  à <key>)"],

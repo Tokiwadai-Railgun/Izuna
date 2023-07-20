@@ -4,7 +4,7 @@ const userGamesInfoModel = require("../../models/game.js")
 
 module.exports = {
     name: "spam_report",
-    category: "security",
+    category: "securite",
     aliases: ["spamreport"],
     usage: "gameconfig <user>",
     permissions: [PermissionsBitField.Flags.SendMessages],
