@@ -1,4 +1,4 @@
-const { ReactionUserManager, InteractionWebhook, ApplicationCommandOptionType, PermissionsBitField } = require("discord.js");
+const { ReactionUserManager, InteractionWebhook, ApplicationCommandOptionType, PermissionsBitField, EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require("discord.js");
 const guild = require("../../models/guild");
 module.exports = {
     name: "dbconfig",
@@ -10,120 +10,57 @@ module.exports = {
     ownerOnly: true,
     description: "Configurer les donnés relative au serveur.",
     async run(Izuna, message, args, guildSettings) {
-        console.log(args[0]);
-        if (!args[0] || !args[0].match(/^(prefix|logChannel|wlcChannel)$/)) return message.reply(`Clefs non valide ou non précisée, tapez ` + "``" + guildSettings.prefix + "help dbconfig" + "``" + ` pour la liste des clefs.`);
 
-        const key = args[0];
-        const value = args[1];
-
-        if (key === "logChannel") {
-            if (value) {
-                if (!message.guild.channels.cache.has(value)) return message.reply("Ce salon n'existe pas.");
-
-                await Izuna.updateGuild(message.guild, { logChannel: value.id })
-                return message.reply({content: `Le nouveau salon de logs est : ${message.guild.channels.cache.get(value.id)}.`});
-
-            } else {
-                message.reply({content: `Le salon de logs est actuellement : ${message.guild.channels.cache.get(guildSettings.logChannel)}`});
-            }
-        } else if (key === "prefix") {
-            if (value) {
-                if (value == message.mentions.members.first() || value == message.mentions.channels.first()) return message.reply("Format de prefix invalide.");
-
-                if (value === "base") {
-                    await Izuna.updateGuild(message.guild, { prefix: "izu " })
-                    return message.reply({content: `Le nouveau prefix est : izu .`});
-                } else {
-                    await Izuna.updateGuild(message.guild, { prefix: value })
-                    return message.reply({content: `Le nouveau prefix est : ${value}.`});
-                }
-
-
-            } else {
-                message.reply({content: `Le prefix est actuellement : ${guildSettings.prefix}`});
-            }
-        } else if (key === "wlcChannel") {
-            if (value) {
-                await Izuna.updateGuild(message.guild, { wlcChannel: value.id })
-                return message.reply({content: `Le nouveau salon de bienvenue est : ${message.guild.channels.cache.get(value.id)}`});
-            }
-        }  else {
-            message.reply("Clef invalide")
-        }
         
     },
-    options : [
-        {
-            name: "key",
-            description: "Ce que vous voulez changer.",
-            type: ApplicationCommandOptionType.String,
-            required: true,
-            choices: [
-                {
-                    name: "logChannel",
-                    value: "logChannel",
-                    description: "Le channel de log du serveur."
-                },
-                {
-                    name: "prefix",
-                    value: "prefix",
-                    description: "Le prefix sur le serveur."
-                },
-                {
-                    name: "wlcChannel",
-                    value: "wlcChannel",
-                    description: "Le channel de bienvenue du serveur."
-                },
-                {
-                    name: "memberRole",
-                    value:"memberRole",
-                    description: "le rôle attribué à chaque membre lors-ce qu'il accepte les règles (fournir une ID)"
-                }
-            ]
-        },
-        {
-            name: "value",
-            description: "Eventuelle modification à apporter (id pour le salon).",
-            type: ApplicationCommandOptionType.String,
-            required: false,
-        },
-    ],
     async runInteraction(Izuna, interaction, guildSettings) {
-        const key = interaction.options.getString("key");
-        const value = interaction.options.getString("value");
+        // refonte avec des bouttons
 
-        if (key === "logChannel") {
-            if (value) {
-                await Izuna.updateGuild(interaction.guild, { logChannel: value })
-                return interaction.reply({content: `Le nouveau salon de logs est : ${interaction.guild.channels.cache.get(value)}`});
+        // on récupère donc les données dans la bdd
+        const logChannelID = guildSettings.logChannel
+        const wlcChannelID = guildSettings.wlcChannel ? guildSettings.wlcChannel : "Aucun"
+        const prefix = guildSettings.prefix
+        const memberRoleID = guildSettings.memberRole
 
-            } else {
-                interaction.reply({content: `Le salon de logs est actuellement : ${interaction.guild.channels.cache.get(guildSettings.logChannel)}`});
-            }
-        } else if (key === "prefix") {
-            if (value) {
-                await Izuna.updateGuild(interaction.guild, { prefix: value })
-                return interaction.reply({content: `Le nouveau prefix est : ${value}}`});
+        const logChannel = interaction.guild.channels.cache.get(logChannelID) ? interaction.guild.channels.cache.get(logChannelID) : "Aucun"
+        const wlcChannel = interaction.guild.channels.cache.get(wlcChannelID) ? interaction.guild.channels.cache.get(wlcChannelID) : "Aucun"
+        const memberRole = interaction.guild.roles.cache.get(memberRoleID) ? interaction.guild.roles.cache.get(memberRoleID) : "Aucun"
+        // Premier embed présentant le status actuel de la db
+        console.log(interaction.user.avatarURL())
+        const firstEmbed = new EmbedBuilder()
+            .setTitle("État du serveur")
+            .setDescription("Configuation actuelle du serveur, pour la modifier veuillez intéragir avec les bouttons")
+            .addFields([
+                { name: "Salon d'archives", value:`${logChannel}`, inline: true},
+                { name: "Salon de Bienvenue", value:`${wlcChannel}`,inline: true},
+                { name: "Rôle membre", value:`${memberRole}`, inline: true},
+            ])
+            .setFooter({text: interaction.user.tag, iconURL: interaction.user.avatarURL()})
+            .setColor("#7F0856")
 
-            } else {
-                interaction.reply({content: `Le prefix est actuellement : ${guildSettings.prefix}`});
-            }
-        } else if (key === "wlcChannel") {
-            if (value) {
-                await Izuna.updateGuild(interaction.guild, { wlcChannel: value })
-                return interaction.reply({content: `Le nouveau channel de bienvenue est : ${interaction.guild.channels.cache.get(value)}`});
-            }
-        } else if (key === "memberRole") {
-            if (!value) return interaction.reply({ content: `Le rôle membre est désormais : ${interaction.guild.roles.cache.get(guildSettings.memberRole)}` })
-            if (!interaction.guild.roles.cache.get(value)) return interaction.reply("Id de rôle non valide")
-            await Izuna.updateGuild(interaction.guild, {memberRole: value})
-            return interaction.reply("Le rôle membre à été mis à jours.")
-        }
+
+        //　---- ボタン ----- 
+
+        const logChannelButton = new ButtonBuilder()
+            .setLabel("Salon d'archives")
+            .setCustomId("dbconfig-channel-logs")
+            .setStyle(ButtonStyle.Primary)
         
-        else {
-            interaction.reply("Clef invalide")
-        }
+        // ようこそ
+        const wlcChannelButton = new ButtonBuilder()
+            .setLabel("Salon de Bienvenue")
+            .setCustomId("dbconfig-channel-welcome")
+            .setStyle(ButtonStyle.Primary)
+        
+        const memberRoleButton = new ButtonBuilder()
+            .setLabel("Rôle Membre")
+            .setCustomId("dbconfig-role-member")
+            .setStyle(ButtonStyle.Primary)
+
+        const row = new ActionRowBuilder()
+            .setComponents([logChannelButton, wlcChannelButton, memberRoleButton])
 
 
+        interaction.reply({ embeds:[firstEmbed], components:[row]})
     }
 }
