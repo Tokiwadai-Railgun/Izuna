@@ -3,11 +3,11 @@ const guild = require("../../models/guild");
 module.exports = {
     name: "dbconfig",
     category: "admin",
-    aliases: ["emit"],
+    aliases: ["db"],
     usage: "dbconfig <key> [value]",
     specialArgs: ["prefix", "logchannel","wlcChannel", "(correspod  à <key>)"],
     permissions: [PermissionsBitField.Flags.Administrator],
-    ownerOnly: true,
+    ownerOnly: false,
     description: "Configurer les donnés relative au serveur.",
     async run(Izuna, message, args, guildSettings) {
 

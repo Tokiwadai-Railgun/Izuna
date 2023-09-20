@@ -1,4 +1,4 @@
-const { ReactionUserManager, InteractionWebhook, EmbedBuilder, ApplicationCommandOptionType, PermissionsBitField } = require("discord.js");
+const { ReactionUserManager, InteractionWebhook, EmbedBuilder, ApplicationCommandOptionType, PermissionsBitField, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
 const securityDb = require("../../models/securityModel.js");
 const userXpData = require("../../models/userXpData");
 
@@ -256,16 +256,39 @@ module.exports = {
 
                     const embed = new EmbedBuilder()
                         .setTitle("Etat de la sécurité")
+                        //.setDescription("La fonction de sécurité permet de garder un contrôle sur une certain exploitation de bug d'un utilisateur voulant s'octroyer un rôle administrateur.")
                         .setThumbnail(interaction.guild.iconURL())
                         .addFields([
-                            { name: "Status", value: serverSecInfo.status, inline: false },
-                            { name: "Spam protect", value: serverSecInfo.spamProtectStatus, inline: false },
-                            { name: "Membres administrateurs", value: adminMembersName.join(", ") || "aucun", inline: false },
-                            { name: "Rôles administrateurs (id)", value: adminRolesName.join(", ") || "aucun", inline: false },
+                            { name: "Fonctions", value: "La fonction de sécurité est séparée en plusieurs sous fonctions répertoriés ci-dessous, elles sont donc activables et désactivables séparéments."},
+                            { name: "Status", value: serverSecInfo.status, inline: true },
+                            { name: "Spam protect", value: serverSecInfo.spamProtectStatus, inline: true },
+                            { name:'Rôles', value:'Les rôles répertoriés ci-dessous sont les différents rôles permettant de faire fonctionner la sécurité. Leurs utilités sont précités dans leurs pages dédiés ou dans celles des les fonctions qui les utilisent' },
+                            { name: "Membres administrateurs", value: adminMembersName.join(", ") || "aucun", inline: true },
+                            { name: "Rôles administrateurs (id)", value: adminRolesName.join(", ") || "aucun", inline: true },
                         ])
+                        .setColor("#7F0856")
+                        .setFooter({ iconURL: Izuna.user.avatarURL(), text:"Security Embed."})
                             
 
-                    interaction.reply({embeds: [embed]});
+
+                    //　---- ボタン ----
+                    const functionsButton = new ButtonBuilder()
+                        .setLabel("Configuration des fonctions")
+                        .setCustomId("security-functions")
+                        .setStyle(ButtonStyle.Primary)
+                    
+                    const buttonButton = new ButtonBuilder()
+                        .setLabel("Configuration des boutons")
+                        .setCustomId("security-buttons")
+                        .setStyle(ButtonStyle.Primary)
+                    
+                    
+
+
+                    const row = new ActionRowBuilder()
+                        .addComponents(globalStatusButton, spamProtectStatus, inviteBlockStatus, adminRoleButton, moderatorRoleButton)
+
+                    interaction.reply({embeds: [embed], components:[row]});
                     break;
             }
     }
