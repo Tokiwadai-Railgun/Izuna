@@ -42,7 +42,7 @@ module.exports = {
             }
 
             button.runInteraction(Izuna, interaction, guildSettings);
-        } else if (interaction.isSelectMenu()) {
+        } else if (interaction.isStringSelectMenu() || interaction.isUserSelectMenu()) {
             const selectMenu = Izuna.selects.get(interaction.customId);
 
             if (!selectMenu) {
