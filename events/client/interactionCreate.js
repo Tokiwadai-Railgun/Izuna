@@ -7,8 +7,8 @@ module.exports = {
         // console.log de debug, pour savoir la dernière commande lancée avant un eventuelle crash
         console.log(`${interaction.guild.name} : ${interaction.channel.name} : ${interaction.user.tag} : ${interaction.type} : ${interaction.commandName} : ${interaction.customId}`);
 
-        if (interaction.guild.id != "926874968925548554") return;
-        if (interaction.channel.type === "dm" || interaction.user.id !== "330026848052314112") return;
+        if (interaction.guild.id != "926874968925548554" && interaction.guild.id != "1252336697002430475") return;
+        if (interaction.channel.type === "dm") return;
 
         let guildSettings = await Izuna.getGuild(interaction.guild);
         if (!guildSettings) {

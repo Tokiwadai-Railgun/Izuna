@@ -9,6 +9,7 @@ const dotenv = require("dotenv"); dotenv.config();
 const axios = require("axios");
 
 const userDuGroupeXpData = require("../models/userDuGroupeXpData.js")
+const hoyolabData = require('../models/hoyolab.js');
 
 module.exports = Izuna => {
     Izuna.getGuild = async guild => {
@@ -69,7 +70,6 @@ module.exports = Izuna => {
         if (typeof userData != "object") userData  = {}
         for (const key in memberSettings) {
             if (userData[key] != memberSettings[key]) userData[key] = memberSettings[key];
-
         }
         return userData.updateOne(userData);
     }
@@ -183,5 +183,30 @@ module.exports = Izuna => {
 
         return guildData.updateOne(setting);
         
+    }
+
+
+    // Genshin related functions
+    Izuna.getHoyoData = async(userId) => {
+        const data = await hoyolabData.findOne({ discord_userId: userId})
+        return data;
+    }
+
+    Izuna.updateHoyoData = async(userId, newHoyoData) => {
+        let data = await Izuna.getHoyoData(userId)
+        return data.updateOne(newHoyoData);
+
+    }
+
+    Izuna.createHoyoData = async(userId, ltoken, ltuid, genshin_uid, hsr_uid) => {
+        if (!genshin_uid || !hsr_uid || !ltoken || !ltuid || !userId) return "Error : Missing Data";
+
+        const createHoyoData = new hoyolabData({ discord_userId: userId, genshin_uid: genshin_uid, hsr_uid: hsr_uid, ltoken: ltoken, ltuid: ltuid });
+        createHoyoData.save()
+            .then(g => {
+                console.log(`hoyolabData added! (${g.discord_userId})`)
+                return "Données Crées";
+            })
+            .catch(err => console.log(err));
     }
 }

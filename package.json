@@ -4,7 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node main.js",
+    "dev": "nodemon main.js"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,7 @@
     "discord.js": "^14.11.0",
     "dotenv": "16.0.1",
     "glob": "^7.2.3",
+    "hoyoapi": "^1.2.0",
     "mongoose": "^6.8.4",
     "ms": "2.1.3"
   }

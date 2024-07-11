@@ -3,6 +3,7 @@ const dotenv = require("dotenv"); dotenv.config();
 const mongoose = require("mongoose");
 const Izuna = new Client({ intents: 38671, partials: [Partials.Message, Partials.Channel, Partials.Reaction, Partials.User]});
 const Logger = require("./utils/logger");
+const claim = require("./repeated-functions/hoyolab-daily");
 
 ["commands", "buttons", "selects"].forEach(x => Izuna[x] = new Collection());
 
@@ -28,3 +29,6 @@ mongoose.connect(process.env.DATABASE_URI, {
 }).then(() => { console.log("Connected to database") }).catch(err => { Logger.error("Error while connecting to database : " + err) });
 
 Izuna.login(process.env.DISCORD_TOKEN);
+
+// then process to launch every repeated functions
+claim();

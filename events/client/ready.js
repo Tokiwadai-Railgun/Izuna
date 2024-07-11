@@ -11,7 +11,9 @@ module.exports = {
         // commandes Instantanés (de test)
         const devGuild = await Izuna.guilds.cache.get("926874968925548554");//717098681809879092
         devGuild.commands.set(Izuna.commands.map(cmd => cmd));
-        
+        const amour = await Izuna.guilds.cache.get("1252336697002430475");//717098681809879092
+        amour.commands.set(Izuna.commands.map(cmd => cmd));
+
 
         Izuna.user.setPresence({activities: [{ name: "izu help", type:"LISTENING" }], status: "online"});
 
