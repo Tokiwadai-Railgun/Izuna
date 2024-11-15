@@ -1,0 +1,16 @@
+{
+    {"ID": {
+        "log": {
+            "logchannel": "",
+            "warnchannel": ""
+        },
+        "security": {
+            "status": false,
+            "adminRoles": [],
+            "amdinsUser":[],
+            "adminBots"[],
+            
+        }
+        
+    }},
+}
